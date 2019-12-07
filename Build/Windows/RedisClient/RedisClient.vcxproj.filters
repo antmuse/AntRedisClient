@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Include">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Include\RedisClient">
+      <UniqueIdentifier>{21905131-ad6b-41b8-bf82-b56caf6c2725}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\RedisClient">
+      <UniqueIdentifier>{65029b2f-ffea-4a8f-9f80-92dd5d839fce}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\Include\HConfig.h">
+      <Filter>Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\RedisClient\CNoncopyable.h">
+      <Filter>Include\RedisClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\RedisClient\CRedisClient.h">
+      <Filter>Include\RedisClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\RedisClient\CRedisClientCluster.h">
+      <Filter>Include\RedisClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\RedisClient\CRedisClientPool.h">
+      <Filter>Include\RedisClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\RedisClient\CRedisRequest.h">
+      <Filter>Include\RedisClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\RedisClient\CRedisResponse.h">
+      <Filter>Include\RedisClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\RedisClient\CQueue1Way.h">
+      <Filter>Source\RedisClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\RedisClient\CQueue2Way.h">
+      <Filter>Source\RedisClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\RedisClient\CRedisCommand.h">
+      <Filter>Source\RedisClient</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\Source\RedisClient\CQueue1Way.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CQueue2Way.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisClient.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisClientCluster.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisClientPool.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisCluster.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisCommand.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisConnection.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisKey.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisList.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisRequest.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisResponse.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisString.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
