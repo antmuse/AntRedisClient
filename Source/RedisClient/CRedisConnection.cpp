@@ -5,6 +5,9 @@ namespace db {
 
 
 bool CRedisRequest::auth(const c8* passowrd) {
+    if (nullptr == passowrd) {
+        return false;
+    }
     const c8* argv[2];
     argv[0] = "AUTH";
     argv[1] = passowrd;
@@ -15,6 +18,9 @@ bool CRedisRequest::auth(const c8* passowrd) {
 }
 
 bool CRedisRequest::echo(const c8* msg) {
+    if (nullptr == msg) {
+        return false;
+    }
     const c8* argv[2];
     argv[0] = "ECHO";
     argv[1] = msg;

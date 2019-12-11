@@ -95,5 +95,14 @@
     <ClCompile Include="..\..\..\Source\RedisClient\CRedisString.cpp">
       <Filter>Source\RedisClient</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisHash.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisSet.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisSortedSet.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

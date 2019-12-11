@@ -5,10 +5,16 @@ namespace irr {
 namespace db {
 
 bool CRedisRequest::del(const c8* key) {
+    if (nullptr == key) {
+        return false;
+    }
     return del(key, static_cast<u32>(strlen(key)));
 }
 
 bool CRedisRequest::del(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -25,10 +31,16 @@ bool CRedisRequest::del(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::unlink(const c8* key) {
+    if (nullptr == key) {
+        return false;
+    }
     return unlink(key, static_cast<u32>(strlen(key)));
 }
 
 bool CRedisRequest::unlink(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -45,10 +57,16 @@ bool CRedisRequest::unlink(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::pttl(const c8* key) {
+    if (nullptr == key) {
+        return false;
+    }
     return pttl(key, static_cast<u32>(strlen(key)));
 }
 
 bool CRedisRequest::pttl(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -65,10 +83,16 @@ bool CRedisRequest::pttl(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::ttl(const c8* key) {
+    if (nullptr == key) {
+        return false;
+    }
     return ttl(key, static_cast<u32>(strlen(key)));
 }
 
 bool CRedisRequest::ttl(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -85,10 +109,16 @@ bool CRedisRequest::ttl(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::type(const c8* key) {
+    if (nullptr == key) {
+        return false;
+    }
     return type(key, static_cast<u32>(strlen(key)));
 }
 
 bool CRedisRequest::type(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -105,10 +135,16 @@ bool CRedisRequest::type(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::dump(const c8* key) {
+    if (nullptr == key) {
+        return false;
+    }
     return dump(key, static_cast<u32>(strlen(key)));
 }
 
 bool CRedisRequest::dump(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -126,10 +162,16 @@ bool CRedisRequest::dump(const c8* key, u32 keyLen) {
 
 
 bool CRedisRequest::keys(const c8* key) {
+    if (nullptr == key) {
+        return false;
+    }
     return keys(key, static_cast<u32>(strlen(key)));
 }
 
 bool CRedisRequest::keys(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -146,10 +188,16 @@ bool CRedisRequest::keys(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::pexpire(const c8* key, u32 timeout) {
+    if (nullptr == key) {
+        return false;
+    }
     return pexpire(key, static_cast<u32>(strlen(key)), timeout);
 }
 
 bool CRedisRequest::pexpire(const c8* key, u32 keyLen, u32 timeout) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -171,10 +219,16 @@ bool CRedisRequest::pexpire(const c8* key, u32 keyLen, u32 timeout) {
 }
 
 bool CRedisRequest::move(const c8* key, u32 destDB) {
+    if (nullptr == key) {
+        return false;
+    }
     return move(key, static_cast<u32>(strlen(key)), destDB);
 }
 
 bool CRedisRequest::move(const c8* key, u32 keyLen, u32 destDB) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -196,10 +250,16 @@ bool CRedisRequest::move(const c8* key, u32 keyLen, u32 destDB) {
 }
 
 bool CRedisRequest::persist(const c8* key) {
+    if (nullptr == key) {
+        return false;
+    }
     return persist(key, static_cast<u32>(strlen(key)));
 }
 
 bool CRedisRequest::persist(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -216,10 +276,16 @@ bool CRedisRequest::persist(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::objectRefcount(const c8* key) {
+    if (nullptr == key) {
+        return false;
+    }
     return objectRefcount(key, static_cast<u32>(strlen(key)));
 }
 
 bool CRedisRequest::objectRefcount(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -239,10 +305,16 @@ bool CRedisRequest::objectRefcount(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::objectEncoding(const c8* key) {
+    if (nullptr == key) {
+        return false;
+    }
     return objectEncoding(key, static_cast<u32>(strlen(key)));
 }
 
 bool CRedisRequest::objectEncoding(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -262,10 +334,16 @@ bool CRedisRequest::objectEncoding(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::objectIdletime(const c8* key) {
+    if (nullptr == key) {
+        return false;
+    }
     return objectIdletime(key, static_cast<u32>(strlen(key)));
 }
 
 bool CRedisRequest::objectIdletime(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -285,10 +363,16 @@ bool CRedisRequest::objectIdletime(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::exists(const c8* key) {
+    if (nullptr == key) {
+        return false;
+    }
     return exists(key, static_cast<u32>(strlen(key)));
 }
 
 bool CRedisRequest::exists(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -305,10 +389,16 @@ bool CRedisRequest::exists(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::expire(const c8* key, u32 timeout) {
+    if (nullptr == key) {
+        return false;
+    }
     return expire(key, static_cast<u32>(strlen(key)), timeout);
 }
 
 bool CRedisRequest::expire(const c8* key, u32 keyLen, u32 timeout) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -330,10 +420,16 @@ bool CRedisRequest::expire(const c8* key, u32 keyLen, u32 timeout) {
 }
 
 bool CRedisRequest::expireat(const c8* key, s64 timeout) {
+    if (nullptr == key) {
+        return false;
+    }
     return expireat(key, static_cast<u32>(strlen(key)), timeout);
 }
 
 bool CRedisRequest::expireat(const c8* key, u32 keyLen, s64 timeout) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -355,10 +451,16 @@ bool CRedisRequest::expireat(const c8* key, u32 keyLen, s64 timeout) {
 }
 
 bool CRedisRequest::pexpireat(const c8* key, s64 timeout) {
+    if (nullptr == key) {
+        return false;
+    }
     return pexpireat(key, static_cast<u32>(strlen(key)), timeout);
 }
 
 bool CRedisRequest::pexpireat(const c8* key, u32 keyLen, s64 timeout) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -391,10 +493,16 @@ bool CRedisRequest::randomkey() {
 }
 
 bool CRedisRequest::rename(const c8* key1, const c8* key2) {
+    if (nullptr == key1 || nullptr == key2) {
+        return false;
+    }
     return rename(key1, static_cast<u32>(strlen(key1)), key2, static_cast<u32>(strlen(key2)));
 }
 
 bool CRedisRequest::rename(const c8* key1, u32 keyLen1, const c8* key2, u32 keyLen2) {
+    if (nullptr == key1 || 0 == keyLen1 || nullptr == key2 || 0 == keyLen2) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
 
@@ -415,10 +523,16 @@ bool CRedisRequest::rename(const c8* key1, u32 keyLen1, const c8* key2, u32 keyL
 }
 
 bool CRedisRequest::renamenx(const c8* key1, const c8* key2) {
+    if (nullptr == key1 || nullptr == key2) {
+        return false;
+    }
     return renamenx(key1, static_cast<u32>(strlen(key1)), key2, static_cast<u32>(strlen(key2)));
 }
 
 bool CRedisRequest::renamenx(const c8* key1, u32 keyLen1, const c8* key2, u32 keyLen2) {
+    if (nullptr == key1 || 0 == keyLen1 || nullptr == key2 || 0 == keyLen2) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
 
@@ -439,6 +553,9 @@ bool CRedisRequest::renamenx(const c8* key1, u32 keyLen1, const c8* key2, u32 ke
 }
 
 bool CRedisRequest::restore(const c8* key1, u32 keyLen1, const c8* key2, u32 keyLen2, s32 ttl, bool replace) {
+    if (nullptr == key1 || 0 == keyLen1 || nullptr == key2 || 0 == keyLen2) {
+        return false;
+    }
     const u32 cnt = 5;
     const c8* argv[cnt];
 
@@ -495,11 +612,11 @@ bool CRedisRequest::scan(u32 offset, const c8* pattern, u32 patLen, u32 count) {
         cnt += 2;
     }
 
+    c8 buf2[16];
     if (count > 0) {
         argv[cnt] = "COUNT";
         lens[cnt++] = sizeof("COUNT") - 1;
 
-        c8 buf2[16];
         snprintf(buf2, sizeof(buf2), "%u", count);
         argv[cnt] = buf2;
         lens[cnt++] = (u32)strlen(buf2);
@@ -510,6 +627,9 @@ bool CRedisRequest::scan(u32 offset, const c8* pattern, u32 patLen, u32 count) {
 
 bool CRedisRequest::migrate(const c8* ip, u16 port, const c8* key, u32 keyLen,
     u32 destDB, u32 timeout, c8 flag) {
+    if (nullptr == ip || nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 max = 7;
     const c8* argv[max];
     u32 lens[max];

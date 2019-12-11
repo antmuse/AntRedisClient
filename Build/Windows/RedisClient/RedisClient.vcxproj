@@ -195,10 +195,13 @@
     <ClCompile Include="..\..\..\Source\RedisClient\CRedisCluster.cpp" />
     <ClCompile Include="..\..\..\Source\RedisClient\CRedisCommand.cpp" />
     <ClCompile Include="..\..\..\Source\RedisClient\CRedisConnection.cpp" />
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisHash.cpp" />
     <ClCompile Include="..\..\..\Source\RedisClient\CRedisKey.cpp" />
     <ClCompile Include="..\..\..\Source\RedisClient\CRedisList.cpp" />
     <ClCompile Include="..\..\..\Source\RedisClient\CRedisRequest.cpp" />
     <ClCompile Include="..\..\..\Source\RedisClient\CRedisResponse.cpp" />
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisSet.cpp" />
+    <ClCompile Include="..\..\..\Source\RedisClient\CRedisSortedSet.cpp" />
     <ClCompile Include="..\..\..\Source\RedisClient\CRedisString.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

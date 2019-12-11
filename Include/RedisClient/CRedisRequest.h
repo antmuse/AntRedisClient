@@ -116,7 +116,7 @@ public:
     //LINSERT key BEFORE|AFTER pivot value
     bool linsert(const c8* key, u32 keyLen, const c8* pivot, u32 pivotLen,
         const c8* val, u32 valLen, bool after);
-
+     
     bool lrem(const c8* key, u32 keyLen, s32 pos, const c8* val, u32 valLen);
     bool ltrim(const c8* key, u32 keyLen, s32 start, s32 end);
 
@@ -162,6 +162,82 @@ public:
     bool getrange(const c8* key, u32 keyLen, s32 start, s32 end);
 
 
+    //---------------------------------set---------------------------------
+    bool sdiff(const c8** keys, const u32* keyLens, u32 count);
+    bool sdiffstore(const c8* destKey, u32 destKeyLen, const c8** keys, const u32* keyLens, u32 count);
+    bool sunion(const c8** keys, const u32* keyLens, u32 count);
+    bool sunionstore(const c8* destKey, u32 destKeyLen, const c8** keys, const u32* keyLens, u32 count);
+    bool sinter(const c8** keys, const u32* keyLens, u32 count);
+    //SINTERSTORE
+    bool sinterstore(const c8* destKey, u32 destKeyLen, const c8** keys, const u32* keyLens, u32 count);
+    bool sadd(const c8* key, u32 keyLen, const c8* val, const u32 valLens);
+    bool sadd(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    //SISMEMBER key member
+    bool sismember(const c8* key, u32 keyLen, const c8* val, const u32 valLens);
+    bool spop(const c8* key, u32 keyLen);
+    bool scard(const c8* key, u32 keyLen);
+    bool smembers(const c8* key, u32 keyLen);
+    //SRANDMEMBER key [count]
+    bool srandmember(const c8* key, u32 keyLen, u32 count = 0);
+    bool srem(const c8* key, u32 keyLen, const c8* val, const u32 valLens);
+    bool srem(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    bool smove(const c8* key1, u32 keyLen1, const c8* key2, u32 keyLen2, const c8* val, const u32 valLen);
+    bool sscan(const c8* key, u32 keyLen, u32 offset, const c8* pattern, u32 patLen, u32 count = 0);
+
+
+    //---------------------------------zset---------------------------------
+    /*
+    * @brief ZADD key score member [[score member] [score member] ¡­]
+    */
+    bool zadd(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    bool zscore(const c8* key, u32 keyLen, const c8* val, const u32 valLens);
+    //ZINCRBY key increment member
+    bool zincrby(const c8* key, u32 keyLen, const c8* val, const u32 valLens, s32 value);
+    bool zcard(const c8* key, u32 keyLen);
+    //ZCOUNT key min max
+    bool zcount(const c8* key, u32 keyLen, s32 min, s32 max);
+    //ZRANGE key start stop [WITHSCORES]
+    bool zrange(const c8* key, u32 keyLen, s32 start, s32 stop, bool withScore = false);
+    bool zrevrange(const c8* key, u32 keyLen, s32 start, s32 stop, bool withScore = false);
+    /**
+    * @brief ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT offset count]
+    * @param flag Î»¿ª¹Ø 1: >min, 2: -inf, 3: <max, 4: +inf
+    */
+    bool zrangebyscore(const c8* key, u32 keyLen, f32 min, f32 max, u32 flag = 0, bool withScore = false);
+    //ZREVRANGEBYSCORE key max min [WITHSCORES] [LIMIT offset count]
+    bool zrevrangebyscore(const c8* key, u32 keyLen, f32 min, f32 max, u32 flag = 0, bool withScore = false);
+    bool zrank(const c8* key, u32 keyLen, const c8* val, const u32 valLens);
+    bool zrevrank(const c8* key, u32 keyLen, const c8* val, const u32 valLens);
+    bool zrem(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    //ZREMRANGEBYRANK key start stop
+    bool zremrangebyrank(const c8* key, u32 keyLen, s32 start, s32 stop);
+    //ZREMRANGEBYSCORE key min max
+    bool zremrangebyscore(const c8* key, u32 keyLen, f32 min, f32 max, u32 flag = 0);
+    //ZRANGEBYLEX key min max [LIMIT offset count]
+    bool zrangebylex(const c8* key, u32 keyLen, const c8* min, u32 minLen, const c8* max, u32 maxLen);
+    //ZLEXCOUNT key min max
+    bool zlexcount(const c8* key, u32 keyLen, const c8* min, u32 minLen, const c8* max, u32 maxLen);
+    //ZREMRANGEBYLEX key min max
+    bool zremrangebylex(const c8* key, u32 keyLen, const c8* min, u32 minLen, const c8* max, u32 maxLen);
+    //ZSCAN key cursor [MATCH pattern] [COUNT count]
+    //TODO>>
+
+    //---------------------------------hash---------------------------------
+    bool hset(const c8* key, u32 keyLen, const c8* name, u32 nameLen, const c8* value, u32 valLen);
+    bool hsetnx(const c8* key, u32 keyLen, const c8* name, u32 nameLen, const c8* value, u32 valLen);
+    bool hget(const c8* key, u32 keyLen, const c8* name, u32 nameLen);
+    bool hgetall(const c8* key, u32 keyLen);
+    bool hexists(const c8* key, u32 keyLen, const c8* name, u32 nameLen);
+    bool hdel(const c8* key, u32 keyLen, const c8* name, u32 nameLen);
+    bool hlen(const c8* key, u32 keyLen);
+    bool hstrlen(const c8* key, u32 keyLen, const c8* name, u32 nameLen);
+    bool hincrby(const c8* key, u32 keyLen, const c8* name, u32 nameLen, s32 val);
+    bool hincrbyfloat(const c8* key, u32 keyLen, const c8* name, u32 nameLen, f32 val);
+    bool hkeys(const c8* key, u32 keyLen);
+    bool hvals(const c8* key, u32 keyLen);
+    bool hscan(const c8* key, u32 keyLen, u32 offset, const c8* pattern, u32 patLen, u32 count = 0);
+    bool hmset(const c8* key, u32 keyLen, const c8** pairs, const u32* pairLens, u32 count);
+    bool hmget(const c8* key, u32 keyLen, const c8** name, const u32* nameLen, u32 count);
 
 
 private:

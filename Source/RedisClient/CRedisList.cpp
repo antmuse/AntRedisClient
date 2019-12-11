@@ -4,6 +4,9 @@ namespace irr {
 namespace db {
 
 bool CRedisRequest::llen(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -20,6 +23,9 @@ bool CRedisRequest::llen(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::lset(const c8* key, u32 keyLen, u32 pos, const c8* val, u32 valLen) {
+    if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLen) {
+        return false;
+    }
     const u32 cnt = 4;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -46,6 +52,9 @@ bool CRedisRequest::lset(const c8* key, u32 keyLen, u32 pos, const c8* val, u32 
 
 bool CRedisRequest::linsert(const c8* key, u32 keyLen, const c8* pivot, u32 pivotLen,
     const c8* val, u32 valLen, bool after) {
+    if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLen || nullptr == pivot || 0 == pivotLen) {
+        return false;
+    }
     const u32 cnt = 5;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -77,6 +86,9 @@ bool CRedisRequest::linsert(const c8* key, u32 keyLen, const c8* pivot, u32 pivo
 }
 
 bool CRedisRequest::lindex(const c8* key, u32 keyLen, u32 pos) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -99,6 +111,9 @@ bool CRedisRequest::lindex(const c8* key, u32 keyLen, u32 pos) {
 }
 
 bool CRedisRequest::lrem(const c8* key, u32 keyLen, s32 pos, const c8* val, u32 valLen) {
+    if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLen) {
+        return false;
+    }
     const u32 cnt = 4;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -124,6 +139,9 @@ bool CRedisRequest::lrem(const c8* key, u32 keyLen, s32 pos, const c8* val, u32 
 }
 
 bool CRedisRequest::lpush(const c8* key, u32 keyLen, const c8* val, u32 valLen) {
+    if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -144,6 +162,9 @@ bool CRedisRequest::lpush(const c8* key, u32 keyLen, const c8* val, u32 valLen) 
 }
 
 bool CRedisRequest::rpush(const c8* key, u32 keyLen, const c8* val, u32 valLen) {
+    if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -164,6 +185,9 @@ bool CRedisRequest::rpush(const c8* key, u32 keyLen, const c8* val, u32 valLen) 
 }
 
 bool CRedisRequest::lpushx(const c8* key, u32 keyLen, const c8* val, u32 valLen) {
+    if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -184,6 +208,9 @@ bool CRedisRequest::lpushx(const c8* key, u32 keyLen, const c8* val, u32 valLen)
 }
 
 bool CRedisRequest::rpushx(const c8* key, u32 keyLen, const c8* val, u32 valLen) {
+    if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -204,6 +231,9 @@ bool CRedisRequest::rpushx(const c8* key, u32 keyLen, const c8* val, u32 valLen)
 }
 
 bool CRedisRequest::rpoplpush(const c8* key, u32 keyLen, const c8* val, u32 valLen) {
+    if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -224,6 +254,9 @@ bool CRedisRequest::rpoplpush(const c8* key, u32 keyLen, const c8* val, u32 valL
 }
 
 bool CRedisRequest::brpoplpush(const c8* key, u32 keyLen, const c8* val, u32 valLen) {
+    if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLen) {
+        return false;
+    }
     const u32 cnt = 3;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -244,6 +277,9 @@ bool CRedisRequest::brpoplpush(const c8* key, u32 keyLen, const c8* val, u32 val
 }
 
 bool CRedisRequest::lrange(const c8* key, u32 keyLen, s32 start, s32 end) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 4;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -271,6 +307,9 @@ bool CRedisRequest::lrange(const c8* key, u32 keyLen, s32 start, s32 end) {
 }
 
 bool CRedisRequest::ltrim(const c8* key, u32 keyLen, s32 start, s32 end) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 4;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -298,6 +337,9 @@ bool CRedisRequest::ltrim(const c8* key, u32 keyLen, s32 start, s32 end) {
 }
 
 bool CRedisRequest::rpop(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -315,6 +357,9 @@ bool CRedisRequest::rpop(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::lpop(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -332,6 +377,9 @@ bool CRedisRequest::lpop(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::brpop(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
@@ -349,6 +397,9 @@ bool CRedisRequest::brpop(const c8* key, u32 keyLen) {
 }
 
 bool CRedisRequest::blpop(const c8* key, u32 keyLen) {
+    if (nullptr == key || 0 == keyLen) {
+        return false;
+    }
     const u32 cnt = 2;
     const c8* argv[cnt];
     u32 lens[cnt];
