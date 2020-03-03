@@ -355,8 +355,8 @@ bool CRedisRequest::zrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iMax,
 
     u32 cnt = 4;
     if (withScore) {
-        argv[4] = key;
-        lens[4] = keyLen;
+        argv[4] = "WITHSCORES";
+        lens[4] = sizeof("WITHSCORES") - 1;
         ++cnt;
     }
 
@@ -403,8 +403,8 @@ bool CRedisRequest::zrevrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iM
 
     u32 cnt = 4;
     if (withScore) {
-        argv[4] = key;
-        lens[4] = keyLen;
+        argv[4] = "WITHSCORES";
+        lens[4] = sizeof("WITHSCORES") - 1;
         ++cnt;
     }
 
