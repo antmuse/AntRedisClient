@@ -21,6 +21,10 @@ public:
     bool ping();
     bool quit();
     bool shutdown();
+    bool save();
+    bool bgsave();
+    bool bgrewriteaof();
+    bool lastsave();
 
     //---------------------------------key---------------------------------
     bool del(const c8* key);
@@ -220,7 +224,26 @@ public:
     //ZREMRANGEBYLEX key min max
     bool zremrangebylex(const c8* key, u32 keyLen, const c8* min, u32 minLen, const c8* max, u32 maxLen);
     //ZSCAN key cursor [MATCH pattern] [COUNT count]
-    //TODO>>
+    bool zscan(const c8* key, u32 keyLen, u32 offset, const c8* pattern, u32 patLen, u32 count = 0);
+    /**
+    * @brief ZUNIONSTORE destination numkeys key [key …] [WEIGHTS weight [weight …]] [AGGREGATE SUM|MIN|MAX]
+    * @note destkey used for slot calculate, cmd successed when all the keys should in same slots.
+    * @param aggregate 0=SUM,1=MAX,-1=MIN
+    */
+    bool zunionstore(const c8* destkey, u32 destkeyLen,
+        const c8** val, const u32* valLens,
+        const c8** weight, const u32* weightLens,
+        u32 count, s32 aggregate = 0);
+    /**
+    * @brief ZINTERSTORE destination numkeys key [key …] [WEIGHTS weight [weight …]] [AGGREGATE SUM|MIN|MAX]
+    * @note destkey used for slot calculate, cmd successed when all the keys should in same slots.
+    * @see zunionstore
+    * @param aggregate 0=SUM,1=MAX,-1=MIN
+    */
+    bool zinterstore(const c8* destkey, u32 destkeyLen,
+        const c8** val, const u32* valLens,
+        const c8** weight, const u32* weightLens,
+        u32 count, s32 aggregate = 0);
 
     //---------------------------------hash---------------------------------
     bool hset(const c8* key, u32 keyLen, const c8* name, u32 nameLen, const c8* value, u32 valLen);
@@ -239,6 +262,104 @@ public:
     bool hmset(const c8* key, u32 keyLen, const c8** pairs, const u32* pairLens, u32 count);
     bool hmget(const c8* key, u32 keyLen, const c8** name, const u32* nameLen, u32 count);
 
+    //---------------------------------HyperLogLog---------------------------------
+    //PFADD key element [element …]
+    bool pfadd(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    //PFCOUNT key [key …]
+    bool pfcount(const c8** val, const u32* valLens, u32 count);
+    /**
+    * @brief PFMERGE destkey sourcekey [sourcekey …]
+    * @param count src keys count
+    */
+    bool pafmerge(const c8* destkey, u32 destkeyLen, const c8** srckeys, const u32* srcLens, u32 count);
+
+
+    //---------------------------------GEO---------------------------------
+    //GEOADD key longitude latitude member [longitude latitude member …]
+    bool geoadd(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    //GEOPOS key member [member …]
+    bool geopos(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    /**
+    * @brief GEODIST key member1 member2 [unit]
+    * unit=
+    * 0=m 表示单位为米。
+    * 1=km 表示单位为千米。
+    * 2=mi 表示单位为英里。
+    * 3=ft 表示单位为英尺。
+    */
+    bool geodist(const c8* key, u32 keyLen,
+        const c8* key1, u32 keyLen1,
+        const c8* key2, u32 keyLen2, u32 unit = 0);
+
+    /**
+    * @brief GEORADIUS key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [ASC|DESC] [COUNT count]
+    * @param unit @see geodist()
+    * @param flag 1=WITHCOORD,2=WITHDIST,4=WITHHASH,8=ASC|DESC
+    */
+    bool georadius(const c8* key, u32 keyLen,
+        f32 posX, f32 posY, f32 redius, u32 max = 0, u32 unit = 0, u32 flag = 0);
+
+    /**
+    * @brief GEORADIUSBYMEMBER key member radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [ASC|DESC] [COUNT count]
+    * @param unit @see geodist()
+    * @param flag 1=WITHCOORD,2=WITHDIST,4=WITHHASH,8=ASC|DESC
+    */
+    bool georadiusbymember(const c8* key, u32 keyLen,
+        const c8* member, u32 memberLen, f32 redius, u32 max = 0, u32 unit = 0, u32 flag = 0);
+    /**
+    * @brief GEOHASH key member [member …]
+    */
+    bool geohash(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+
+
+    //---------------------------------BITMAP---------------------------------
+    /**
+    * @brief SETBIT key offset value
+    */
+    bool setbit(const c8* key, u32 keyLen, u32 offset, bool val);
+    /**
+    * @brief GETBIT key offset
+    */
+    bool getbit(const c8* key, u32 keyLen, u32 offset);
+
+    /**
+    * @brief BITCOUNT key[start][end]
+    */
+    bool bitcount(const c8* key, u32 keyLen, u32 min = 0, u32 max = 0xFFFFFFFF);
+
+    /**
+    * @brief BITPOS key bit [start] [end]
+    */
+    bool bitpos(const c8* key, u32 keyLen, bool val, u32 min = 0, u32 max = 0xFFFFFFFF);
+
+    /**
+    * @brief BITOP operation destkey key [key …]
+    * @param flag 0=AND,1=OR,2=NOT,3=XOR
+    */
+    bool bitop(const c8* destkey, u32 destkeyLen, u32 flag,
+        const c8** val, const u32* valLens, u32 count);
+    /**
+    * @brief BITFIELD key [GET type offset] [SET type offset value] [INCRBY type offset increment] [OVERFLOW WRAP|SAT|FAIL]
+    * @param 
+    */
+    bool bitfiled(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+
+
+    //---------------------------------Publish---------------------------------
+    //PUBLISH channel message
+    bool publish(const c8* key, u32 keyLen, const c8* val, const u32 valLen);
+    //SUBSCRIBE channel [channel …]
+    bool subscribe(const c8** val, const u32* valLens, u32 count);
+    //UNSUBSCRIBE [channel [channel …]]
+    bool unsubscribe(const c8** val = nullptr, const u32* valLens = nullptr, u32 count = 0);
+    //PSUBSCRIBE pattern [pattern …]
+    bool psubscribe(const c8** val, const u32* valLens, u32 count);
+    //PUNSUBSCRIBE [pattern [pattern …]]
+    bool punsubscribe(const c8** val = nullptr, const u32* valLens = nullptr, u32 count = 0);
+    //PUBSUB <subcommand> [argument [argument …]]
+    //TODO>>PUBSUB
+
+    //---------------------------------OOO---------------------------------
 
 private:
 };
