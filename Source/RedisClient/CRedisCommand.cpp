@@ -1,7 +1,7 @@
 #include "CRedisCommand.h"
 #include "CRedisClient.h"
 #include "HAtomicOperator.h"
-#include "CCheckCRC16.h"
+#include "CCheckCRC.h"
 #include "IAppLogger.h"
 
 namespace irr {

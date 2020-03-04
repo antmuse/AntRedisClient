@@ -37,9 +37,15 @@ public:
 
     void close();
 
-    bool getEvent(SEvent& iEvent, u32 time);
+    /**
+    * @return 1 if success or timeout, else -1
+    */
+    s32 getEvent(SEvent& iEvent, u32 time);
 
-    u32 getEvents(SEvent* iEvent, u32 iSize, u32 iTime);
+    /**
+    * @return count of launched events if success, else -1
+    */
+    s32 getEvents(SEvent* iEvent, s32 iSize, u32 iTime);
 
     bool add(void* fd, void* key);
 
@@ -106,7 +112,9 @@ enum EPollerEvent {
 class CEventPoller {
 public:
     ///SEvent layout must same as epoll_event's layout
-#pragma pack(1)
+#if defined(APP_PLATFORM_LINUX)
+#pragma pack(4)
+#endif
     struct SEvent {
         union UData {
             u32 mData32;
@@ -119,7 +127,9 @@ public:
             mEvent = msg;
         }
     };
+#if defined(APP_PLATFORM_LINUX)
 #pragma pack()
+#endif
 
     CEventPoller();
 
@@ -127,9 +137,15 @@ public:
 
     static s32 getError();
 
+    /**
+    * @return count of launched events if success, or 0 if timeout, else -1
+    */
     s32 getEvent(SEvent& iEvent, u32 iTime);
 
-    s32 getEvents(SEvent* iEvent, u32 iSize, u32 iTime);
+    /**
+    * @return count of launched events if success, or 0 if timeout, else -1
+    */
+    s32 getEvents(SEvent* iEvent, s32 iSize, u32 iTime);
 
     //EPOLL_CTL_ADD
     bool add(s32 fd, SEvent& iEvent);
