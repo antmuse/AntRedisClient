@@ -104,5 +104,17 @@
     <ClCompile Include="..\..\..\Source\RedisClient\CRedisSortedSet.cpp">
       <Filter>Source\RedisClient</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CHyperLogLog.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CGeography.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CBitMap.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Source\RedisClient\CPublish.cpp">
+      <Filter>Source\RedisClient</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

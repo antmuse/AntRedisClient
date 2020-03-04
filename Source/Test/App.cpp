@@ -33,12 +33,14 @@ void AppQuit() {
 
 
 int main(int argc, char** argv) {
-    irr::IAppLogger::getInstance().addReceiver(irr::IAppLogger::ELRT_CONSOLE);
+    irr::IAppLogger::getInstance().addReceiver(irr::IAppLogger::ELRT_CONSOLE|
+        irr::IAppLogger::ELRT_FILE_HTML);
     irr::u32 key = 1;
     while(key) {
         printf("@0 = Exit\n");
         printf("@1 = Redis Pool\n");
         printf("@2 = Redis Cluster\n");
+        printf("@3 = Redis Cluster ZSET\n");
         printf("@Input menu id = ");
         scanf("%u", &key);
         switch(key) {
@@ -47,6 +49,9 @@ int main(int argc, char** argv) {
             break;
         case 2:
             irr::AppTestRedisCluster(1);
+            break;
+        case 3:
+            irr::AppTestRedisClusterZset(1);
             break;
         default:break;
         }

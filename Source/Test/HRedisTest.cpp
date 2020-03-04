@@ -2,6 +2,7 @@
 #include "IAppLogger.h"
 #include "CWorker.h"
 #include "CWorkerCluster.h"
+#include "CWorkerClusterZset.h"
 #include <vector>
 #include <stdio.h>
 
@@ -32,9 +33,9 @@ void AppTestRedis(int max_threads) {
     chub.start(config);
     config->drop();
 
-    net::CNetAddress addr("192.168.1.102", 3000);
+    net::CNetAddress addr("10.1.63.128", 5000);
     db::CRedisClientPool tRedisPool(&chub);
-    tRedisPool.open(addr, 1, "witcore.cn", 0);
+    tRedisPool.open(addr, 1, "123456", 0);
 
     std::vector<CWorker*> threads;
     for(int i = 0; i < max_threads; i++) {
@@ -49,14 +50,6 @@ void AppTestRedis(int max_threads) {
     //con->setUserPointer(this);
     con->setClientPool(&tRedisPool);
     if(!con->lrange("web_Account1", sizeof("web_Account1") - 1, 0, -1)) {
-        printf("redis get str failed\n");
-    } else {
-        while(!list) {
-            CThread::sleep(100);
-        }
-    }
-    list = false;
-    if(!con->lrange("web_AppHasChannel1", sizeof("web_AppHasChannel1") - 1, 0, -1)) {
         printf("redis get str failed\n");
     } else {
         while(!list) {
@@ -116,6 +109,47 @@ void AppTestRedisCluster(int max_threads) {
     cluster->close();
     std::vector<CWorkerCluster*>::iterator it = threads.begin();
     for(; it != threads.end(); ++it) {
+        (*it)->stop();
+        delete (*it);
+    }
+    chub.stop();
+    delete cluster;
+}
+
+void AppTestRedisClusterZset(int max_threads) {
+    net::CNetConfig* config = AppCreateConfig();
+    net::CNetServiceTCP chub;
+    chub.start(config);
+    config->drop();
+
+    db::CRedisClientCluster* cluster = new db::CRedisClientCluster(&chub);
+    cluster->setPassword("10.1.63.126:5000", "123456");
+    cluster->setPassword("10.1.63.126:5100", "123456");
+    cluster->setPassword("10.1.63.127:5000", "123456");
+    cluster->setPassword("10.1.63.127:5100", "123456");
+    cluster->setPassword("10.1.63.128:5100", "123456");
+    cluster->set("10.1.63.128:5000", 5, "123456");
+    cluster->setMaxRedirect(2);
+    cluster->setMaxTcp(5);
+    cluster->open(false);
+
+    std::vector<CWorkerClusterZset*> threads;
+    for (int i = 0; i < max_threads; i++) {
+        CWorkerClusterZset* thread = new CWorkerClusterZset(*cluster);
+        threads.push_back(thread);
+        thread->start();
+    }
+
+    //CThread::sleep(10000);
+    irr::c8 key = '\0';
+    while ('*' != key) {
+        printf("@Please input [*] to quit");
+        scanf("%c", &key);
+        IAppLogger::log(ELOG_INFO, "AppRunEchoClient", "key=%c", key);
+    }
+    cluster->close();
+    std::vector<CWorkerClusterZset*>::iterator it = threads.begin();
+    for (; it != threads.end(); ++it) {
         (*it)->stop();
         delete (*it);
     }

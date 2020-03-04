@@ -30,6 +30,9 @@
     <ClCompile Include="..\..\..\Source\Test\HRedisTest.cpp">
       <Filter>Source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Source\Test\CWorkerClusterZset.cpp">
+      <Filter>Source</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Text Include="..\..\..\Source\Test\CMakeLists.txt">
@@ -44,6 +47,9 @@
       <Filter>Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Source\Test\HRedisTest.h">
+      <Filter>Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Source\Test\CWorkerClusterZset.h">
       <Filter>Source</Filter>
     </ClInclude>
   </ItemGroup>

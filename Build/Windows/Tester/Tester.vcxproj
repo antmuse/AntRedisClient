@@ -22,7 +22,7 @@
     <ProjectGuid>{2241EBA8-C504-4D8C-91B3-39D6C05956CD}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Tester</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -35,7 +35,7 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -49,7 +49,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v140</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -174,6 +174,7 @@
     <ClCompile Include="..\..\..\Source\Test\App.cpp" />
     <ClCompile Include="..\..\..\Source\Test\CWorker.cpp" />
     <ClCompile Include="..\..\..\Source\Test\CWorkerCluster.cpp" />
+    <ClCompile Include="..\..\..\Source\Test\CWorkerClusterZset.cpp" />
     <ClCompile Include="..\..\..\Source\Test\HRedisTest.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -182,6 +183,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Source\Test\CWorker.h" />
     <ClInclude Include="..\..\..\Source\Test\CWorkerCluster.h" />
+    <ClInclude Include="..\..\..\Source\Test\CWorkerClusterZset.h" />
     <ClInclude Include="..\..\..\Source\Test\HRedisTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
