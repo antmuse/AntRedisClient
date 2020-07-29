@@ -1,11 +1,11 @@
 #pragma once
 
 #include "CThread.h"
-#include "IAppLogger.h"
+#include "CLogger.h"
 #include "CRedisRequest.h"
 #include "CRedisClientPool.h"
 
-namespace irr {
+namespace app {
 
 
 class CWorker : public IRunnable {

@@ -2,7 +2,7 @@
 #include "HConfig.h"
 #include "CMemoryHub.h"
 
-namespace irr {
+namespace app {
 namespace db {
 
 class CRedisRequest;
@@ -25,7 +25,7 @@ class CRedisResponse {
 public:
     union SRedisValue {
         s64 mVal64;
-        c8* mValStr;
+        s8* mValStr;
         CRedisResponse** mNodes; //only for ERRT_ARRAY
     };
     SRedisValue mValue;
@@ -40,7 +40,7 @@ public:
 
     void clear();
 
-    c8* getStr()const {
+    s8* getStr()const {
         return mValue.mValStr;
     }
 
@@ -81,11 +81,11 @@ public:
     *     \p len the position of stream's last '\n'(position start at 0).
     * @return the end position;
     */
-    const c8* import(const c8* str, u64 len);
+    const s8* import(const s8* str, u64 len);
 
     void show(u32 level = 1, u32 index = 1)const;
 
-    void makeError(const c8* str);
+    void makeError(const s8* str);
 
     CRedisResponse* getResult(u32 idx)const {
         if (ERRT_ARRAY != mType || EDS_DONE != mStatus || nullptr == mValue.mNodes) {
@@ -98,7 +98,7 @@ public:
     }
 
 private:
-    bool decodeSize(const c8 ch);
+    bool decodeSize(const s8 ch);
 
     enum EDecodeStatus {
         EDS_INIT = 0,
@@ -118,5 +118,5 @@ private:
 
 
 } //namespace db {
-} // namespace irr
+} // namespace app
 

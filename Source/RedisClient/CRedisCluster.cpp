@@ -1,11 +1,11 @@
 #include "CRedisRequest.h"
 
-namespace irr {
+namespace app {
 namespace db {
 
 
 bool CRedisRequest::clusterInfo() {
-    const c8* argv[2];
+    const s8* argv[2];
     u32 lens[2];
 
     argv[0] = "CLUSTER";
@@ -18,7 +18,7 @@ bool CRedisRequest::clusterInfo() {
 }
 
 bool CRedisRequest::clusterNodes() {
-    const c8* argv[2];
+    const s8* argv[2];
     u32 lens[2];
 
     argv[0] = "CLUSTER";
@@ -31,7 +31,7 @@ bool CRedisRequest::clusterNodes() {
 }
 
 bool CRedisRequest::clusterSlots() {
-    const c8* argv[2];
+    const s8* argv[2];
     u32 lens[2];
 
     argv[0] = "CLUSTER";
@@ -44,5 +44,5 @@ bool CRedisRequest::clusterSlots() {
 }
 
 } //namespace db {
-} // namespace irr
+} // namespace app
 

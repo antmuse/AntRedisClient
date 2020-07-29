@@ -1,9 +1,9 @@
 #include "CRedisClient.h"
-#include "IAppLogger.h"
+#include "CLogger.h"
 #include "IUtility.h"
 #include "HAtomicOperator.h"
 
-namespace irr {
+namespace app {
 namespace db {
 
 CRedisClient::CRedisClient(net::CNetServiceTCP* iServer,
@@ -22,10 +22,10 @@ CRedisClient::CRedisClient(net::CNetServiceTCP* iServer,
 }
 
 CRedisClient::~CRedisClient() {
-    while (4 != mTcpStatus) {
+    while(4 != mTcpStatus) {
         CThread::sleep(20);
     }
-    if (mResult) {
+    if(mResult) {
         mResult->clear();
         mHub->release(mResult);
         mResult = nullptr;
@@ -45,10 +45,10 @@ s32 CRedisClient::onConnect(u32 sessionID,
     const net::CNetAddress& local, const net::CNetAddress& remote) {
     APP_ASSERT(mConnectID == sessionID);
     mTcpStatus = 2;
-    if (mResult) {
+    if(mResult) {
         mResult->clear();
     }
-    if (mPool) {
+    if(mPool) {
         mPool->onConnect(this, mTcpStatus);
         return 0;
     }
@@ -59,9 +59,9 @@ s32 CRedisClient::onDisconnect(u32 sessionID,
     const net::CNetAddress& local, const net::CNetAddress& remote) {
     s32 status = mExitFlag ? 4 : 3;
     mConnectID = 0;
-    if (mCMD) {
-        if (mResult) {
-            if (!mResult->isFinished()) {
+    if(mCMD) {
+        if(mResult) {
+            if(!mResult->isFinished()) {
                 //mResult->clear();
                 mResult->makeError("TCP:onDisconnect");
             }
@@ -72,8 +72,8 @@ s32 CRedisClient::onDisconnect(u32 sessionID,
         }
         callback();
     }
-    if (!mExitFlag) {
-        IAppLogger::logInfo("redis", "CRedisClient::onDisconnect>>%s:%u",
+    if(!mExitFlag) {
+        CLogger::logInfo("redis", "CRedisClient::onDisconnect>>%s:%u",
             mServerAddress.getIPString(), mServerAddress.getPort());
         open();
     }
@@ -82,8 +82,8 @@ s32 CRedisClient::onDisconnect(u32 sessionID,
 }
 
 s32 CRedisClient::onSend(u32 sessionID, void* buffer, s32 size, s32 result) {
-    if (0 != result) {
-        IAppLogger::logInfo("redis", "CRedisClient::onSend>>send fail, buf size=%d", size);
+    if(0 != result) {
+        CLogger::logInfo("redis", "CRedisClient::onSend>>send fail, buf size=%d", size);
         //if (mResult) {
         //    if (!mResult->isFinished()) {
         //        mResult->makeError("TCP:onSend");
@@ -102,13 +102,13 @@ s32 CRedisClient::onSend(u32 sessionID, void* buffer, s32 size, s32 result) {
 }
 
 s32 CRedisClient::onReceive(const net::CNetAddress& remote, u32 sessionID, void* buffer, s32 size) {
-    if (nullptr == mResult) {
+    if(nullptr == mResult) {
         mResult = new
         (reinterpret_cast<CRedisResponse*>(mHub->allocate(sizeof(CRedisResponse)))) CRedisResponse(*mHub);
     }
-    const c8* cur = (c8*)(buffer);
+    const s8* cur = (s8*)(buffer);
     mResult->import(cur, size);
-    if (mResult->isFinished()) {
+    if(mResult->isFinished()) {
         callback();
     }
     return 0;
@@ -122,11 +122,18 @@ void CRedisClient::callback() {
     db::CRedisClientPool* pool = cmd->getClientPool();
     //db::CRedisClient* nd = cmd->getClient();
     APP_ASSERT(pool);
-    if (rst->isMoved()) {
-        const c8* ipt = rst->getStr() + sizeof("MOVED");
-        u32 slot = core::strtoul10(ipt, &ipt);
-        if (cmd->relaunch(slot, ++ipt)) {
-            if (pool) {
+    if(rst->isError()) {
+        s32 replay = (rst->isAsk() ? 2 : (rst->isMoved() ? 4 : 1));
+        const s8* ipt = nullptr;
+        u32 slot = cmd->getSlot();
+        if(replay > 1) {
+            ipt = rst->getStr()
+                + (4 == replay ? sizeof("MOVED") : (2 == replay ? sizeof("ASK") : 0));
+            slot = core::App10StrToU32(ipt, &ipt);
+            ++ipt;
+        }
+        if(cmd->relaunch(slot, ipt, replay)) {
+            if(pool) {
                 pool->push(this);
             }
             rst->clear();
@@ -134,14 +141,14 @@ void CRedisClient::callback() {
             cmd = nullptr;
         }
     }
-    if (cmd) {
+    if(cmd) {
         AppRedisCaller fun = cmd->getCallback();
-        if (fun) {
+        if(fun) {
             fun(cmd, rst);
         }
-        if (AppPoolCallback != fun) {
+        if(AppPoolCallback != fun) {
             cmd->setClient(nullptr);
-            if (pool) {
+            if(pool) {
                 pool->push(this);
             }
         }
@@ -152,20 +159,20 @@ void CRedisClient::callback() {
 }
 
 void CRedisClient::setPassword(const char* pass) {
-    if (pass && pass[0]) {
+    if(pass && pass[0]) {
         memcpy(mPassWord, pass, core::min_(sizeof(mPassWord) - 1, strlen(pass)));
     }
 }
 
 bool CRedisClient::open() {
-    if (mConnectID > 0) {
+    if(mConnectID > 0) {
         return true;
     }
     mTcpStatus = 1;
     mConnectID = mServer->connect(mServerAddress, this);
-    if (0 == mConnectID) {
+    if(0 == mConnectID) {
         mTcpStatus = 4;
-        IAppLogger::logError("redis", "fail to connect redis server: %s:%u",
+        CLogger::logError("redis", "fail to connect redis server: %s:%u",
             mServerAddress.getIPString(), mServerAddress.getPort());
         return false;
     }
@@ -174,7 +181,7 @@ bool CRedisClient::open() {
 
 void CRedisClient::close() {
     mExitFlag = true;
-    if (mConnectID > 0) {
+    if(mConnectID > 0) {
         mServer->disconnect(mConnectID);
     }
 }
@@ -183,14 +190,14 @@ bool CRedisClient::isDislinked() const {
     return mConnectID == 0;
 }
 
-bool CRedisClient::sendRequest(const c8* buf, u32 iSize, CRedisCommand* it) {
-    if (mCMD) {
+bool CRedisClient::sendRequest(const s8* buf, u32 iSize, CRedisCommand* it) {
+    if(mCMD) {
         APP_ASSERT(0);
         return false;
     }
     mCMD = static_cast<CRedisRequest*>(it);
     mCMD->grab();
-    if (iSize == mServer->send(mConnectID, buf, iSize)) {
+    if(iSize == mServer->send(mConnectID, buf, iSize)) {
         return true;
     }
 
@@ -201,5 +208,5 @@ bool CRedisClient::sendRequest(const c8* buf, u32 iSize, CRedisCommand* it) {
 
 
 } //namespace db {
-} // end namespace irr
+} // end namespace app
 

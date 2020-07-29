@@ -1,7 +1,7 @@
 #pragma once
 #include "CRedisCommand.h"
 
-namespace irr {
+namespace app {
 namespace db {
 
 class CRedisRequest : public CRedisCommand {
@@ -15,8 +15,8 @@ public:
     bool clusterSlots();
 
     //---------------------------------connect---------------------------------
-    bool auth(const c8* passowrd);
-    bool echo(const c8* msg);
+    bool auth(const s8* passowrd);
+    bool echo(const s8* msg);
     bool select(s32 dbID);
     bool ping();
     bool quit();
@@ -27,212 +27,212 @@ public:
     bool lastsave();
 
     //---------------------------------key---------------------------------
-    bool del(const c8* key);
-    bool del(const c8* key, u32 kenLen);
+    bool del(const s8* key);
+    bool del(const s8* key, u32 kenLen);
 
-    bool unlink(const c8* key);
-    bool unlink(const c8* key, u32 kenLen);
+    bool unlink(const s8* key);
+    bool unlink(const s8* key, u32 kenLen);
 
-    bool ttl(const c8* key);
-    bool ttl(const c8* key, u32 kenLen);
+    bool ttl(const s8* key);
+    bool ttl(const s8* key, u32 kenLen);
 
-    bool pttl(const c8* key);
-    bool pttl(const c8* key, u32 kenLen);
+    bool pttl(const s8* key);
+    bool pttl(const s8* key, u32 kenLen);
 
-    bool objectRefcount(const c8* key);
-    bool objectRefcount(const c8* key, u32 keyLen);
-    bool objectEncoding(const c8* key);
-    bool objectEncoding(const c8* key, u32 keyLen);
-    bool objectIdletime(const c8* key);
-    bool objectIdletime(const c8* key, u32 keyLen);
+    bool objectRefcount(const s8* key);
+    bool objectRefcount(const s8* key, u32 keyLen);
+    bool objectEncoding(const s8* key);
+    bool objectEncoding(const s8* key, u32 keyLen);
+    bool objectIdletime(const s8* key);
+    bool objectIdletime(const s8* key, u32 keyLen);
 
-    bool type(const c8* key);
-    bool type(const c8* key, u32 kenLen);
+    bool type(const s8* key);
+    bool type(const s8* key, u32 kenLen);
 
-    bool dump(const c8* key);
-    bool dump(const c8* key, u32 kenLen);
+    bool dump(const s8* key);
+    bool dump(const s8* key, u32 kenLen);
 
     bool randomkey();
 
     /**
     * @brief rename key1 to key2.
     */
-    bool rename(const c8* key1, const c8* key2);
-    bool rename(const c8* key1, u32 kenLen1, const c8* key2, u32 kenLen2);
+    bool rename(const s8* key1, const s8* key2);
+    bool rename(const s8* key1, u32 kenLen1, const s8* key2, u32 kenLen2);
 
-    bool renamenx(const c8* key1, const c8* key2);
-    bool renamenx(const c8* key1, u32 kenLen1, const c8* key2, u32 kenLen2);
+    bool renamenx(const s8* key1, const s8* key2);
+    bool renamenx(const s8* key1, u32 kenLen1, const s8* key2, u32 kenLen2);
 
     /**
     * @param timeout in seconds.
     */
-    bool expire(const c8* key, u32 timeout);
-    bool expire(const c8* key, u32 kenLen, u32 timeout);
+    bool expire(const s8* key, u32 timeout);
+    bool expire(const s8* key, u32 kenLen, u32 timeout);
 
-    bool move(const c8* key, u32 destDB);
-    bool move(const c8* key, u32 kenLen, u32 destDB);
+    bool move(const s8* key, u32 destDB);
+    bool move(const s8* key, u32 kenLen, u32 destDB);
 
     /**
     * @param timeout in milliseconds.
     */
-    bool pexpire(const c8* key, u32 timeout);
-    bool pexpire(const c8* key, u32 kenLen, u32 timeout);
+    bool pexpire(const s8* key, u32 timeout);
+    bool pexpire(const s8* key, u32 kenLen, u32 timeout);
 
-    bool pexpireat(const c8* key, s64 timestamp);
-    bool pexpireat(const c8* key, u32 kenLen, s64 timestamp);
+    bool pexpireat(const s8* key, s64 timestamp);
+    bool pexpireat(const s8* key, u32 kenLen, s64 timestamp);
 
     /**
     * @brief 用 UNIX 时间截设置 KEY 的生存周期
     * set the expiration for a key as a UNIX timestamp
     * @param timestamp UNIX 时间截，即自 1970 年以来的秒数
     */
-    bool expireat(const c8* key, s64 timestamp);
-    bool expireat(const c8* key, u32 kenLen, s64 timestamp);
+    bool expireat(const s8* key, s64 timestamp);
+    bool expireat(const s8* key, u32 kenLen, s64 timestamp);
 
-    bool exists(const c8* key);
-    bool exists(const c8* key, u32 kenLen);
+    bool exists(const s8* key);
+    bool exists(const s8* key, u32 kenLen);
 
-    bool keys(const c8* key);
-    bool keys(const c8* key, u32 kenLen);
+    bool keys(const s8* key);
+    bool keys(const s8* key, u32 kenLen);
 
-    bool persist(const c8* key);
-    bool persist(const c8* key, u32 kenLen);
+    bool persist(const s8* key);
+    bool persist(const s8* key, u32 kenLen);
 
-    bool restore(const c8* key, u32 keyLen, const c8* key2, u32 keyLen2, s32 ttl, bool replace);
+    bool restore(const s8* key, u32 keyLen, const s8* key2, u32 keyLen2, s32 ttl, bool replace);
 
-    bool scan(u32 offset, const c8* pattern, u32 patLen, u32 count = 0);
+    bool scan(u32 offset, const s8* pattern, u32 patLen, u32 count = 0);
 
     /**
     * @brief MIGRATE host port key destination-db timeout [COPY] [REPLACE]
     * @param flag c=[COPY] r=[REPLACE] 0=default
     * eg: MIGRATE 127.0.0.1 8899 greeting 0 1000
     */
-    bool migrate(const c8* ip, u16 port, const c8* key, u32 keyLen, u32 destDB, u32 timeout, c8 flag = 0);
+    bool migrate(const s8* ip, u16 port, const s8* key, u32 keyLen, u32 destDB, u32 timeout, s8 flag = 0);
 
 
 
 
 
     //---------------------------------list---------------------------------
-    bool lset(const c8* key, u32 keyLen, u32 pos, const c8* val, u32 valLen);
-    bool lindex(const c8* key, u32 keyLen, u32 pos);
+    bool lset(const s8* key, u32 keyLen, u32 pos, const s8* val, u32 valLen);
+    bool lindex(const s8* key, u32 keyLen, u32 pos);
 
     //LINSERT key BEFORE|AFTER pivot value
-    bool linsert(const c8* key, u32 keyLen, const c8* pivot, u32 pivotLen,
-        const c8* val, u32 valLen, bool after);
+    bool linsert(const s8* key, u32 keyLen, const s8* pivot, u32 pivotLen,
+        const s8* val, u32 valLen, bool after);
      
-    bool lrem(const c8* key, u32 keyLen, s32 pos, const c8* val, u32 valLen);
-    bool ltrim(const c8* key, u32 keyLen, s32 start, s32 end);
+    bool lrem(const s8* key, u32 keyLen, s32 pos, const s8* val, u32 valLen);
+    bool ltrim(const s8* key, u32 keyLen, s32 start, s32 end);
 
-    bool lpush(const c8* key, u32 keyLen, const c8* val, u32 valLen);
-    bool rpush(const c8* key, u32 keyLen, const c8* val, u32 valLen);
+    bool lpush(const s8* key, u32 keyLen, const s8* val, u32 valLen);
+    bool rpush(const s8* key, u32 keyLen, const s8* val, u32 valLen);
 
-    bool lpushx(const c8* key, u32 keyLen, const c8* val, u32 valLen);
-    bool rpushx(const c8* key, u32 keyLen, const c8* val, u32 valLen);
+    bool lpushx(const s8* key, u32 keyLen, const s8* val, u32 valLen);
+    bool rpushx(const s8* key, u32 keyLen, const s8* val, u32 valLen);
 
-    bool rpoplpush(const c8* key, u32 keyLen, const c8* val, u32 valLen);
-    bool brpoplpush(const c8* key, u32 keyLen, const c8* val, u32 valLen);
+    bool rpoplpush(const s8* key, u32 keyLen, const s8* val, u32 valLen);
+    bool brpoplpush(const s8* key, u32 keyLen, const s8* val, u32 valLen);
 
-    bool lpop(const c8* key, u32 keyLen);
-    bool rpop(const c8* key, u32 keyLen);
+    bool lpop(const s8* key, u32 keyLen);
+    bool rpop(const s8* key, u32 keyLen);
 
-    bool blpop(const c8* key, u32 keyLen);
-    bool brpop(const c8* key, u32 keyLen);
+    bool blpop(const s8* key, u32 keyLen);
+    bool brpop(const s8* key, u32 keyLen);
 
-    bool llen(const c8* key, u32 keyLen);
-    bool lrange(const c8* key, u32 keyLen, s32 start, s32 end);
+    bool llen(const s8* key, u32 keyLen);
+    bool lrange(const s8* key, u32 keyLen, s32 start, s32 end);
 
 
     //---------------------------------string---------------------------------
-    bool set(const c8* key, const c8* value);
-    bool set(const c8* key, u32 kenLen, const c8* value, u32 valLen);
-    bool mset(const c8** key, const u32* keyLen, u32 count);
-    bool msetnx(const c8** key, const u32* keyLen, u32 count);
-    bool mget(const c8** key, const u32* keyLen, u32 count);
-    bool getset(const c8* key, u32 kenLen, const c8* value, u32 valLen);
-    bool setnx(const c8* key, u32 kenLen, const c8* value, u32 valLen);
-    bool setex(const c8* key, u32 kenLen, const c8* value, u32 valLen, u32 timeout);
-    bool psetex(const c8* key, u32 kenLen, const c8* value, u32 valLen, u32 timeout);
-    bool get(const c8* key);
-    bool get(const c8* key, u32 keyLen);
-    bool incr(const c8* key, u32 keyLen);
-    bool decr(const c8* key, u32 keyLen);
-    bool incrby(const c8* key, u32 keyLen, s32 addon);
-    bool incrbyfloat(const c8* key, u32 keyLen, f64 addon);
-    bool decrby(const c8* key, u32 keyLen, s32 addon);
-    bool stringlen(const c8* key, u32 keyLen);
-    bool append(const c8* key, u32 keyLen, const c8* value, u32 valLen);
-    bool setrange(const c8* key, u32 kenLen, const c8* value, u32 valLen, u32 offset);
-    bool getrange(const c8* key, u32 keyLen, s32 start, s32 end);
+    bool set(const s8* key, const s8* value);
+    bool set(const s8* key, u32 kenLen, const s8* value, u32 valLen);
+    bool mset(const s8** key, const u32* keyLen, u32 count);
+    bool msetnx(const s8** key, const u32* keyLen, u32 count);
+    bool mget(const s8** key, const u32* keyLen, u32 count);
+    bool getset(const s8* key, u32 kenLen, const s8* value, u32 valLen);
+    bool setnx(const s8* key, u32 kenLen, const s8* value, u32 valLen);
+    bool setex(const s8* key, u32 kenLen, const s8* value, u32 valLen, u32 timeout);
+    bool psetex(const s8* key, u32 kenLen, const s8* value, u32 valLen, u32 timeout);
+    bool get(const s8* key);
+    bool get(const s8* key, u32 keyLen);
+    bool incr(const s8* key, u32 keyLen);
+    bool decr(const s8* key, u32 keyLen);
+    bool incrby(const s8* key, u32 keyLen, s32 addon);
+    bool incrbyfloat(const s8* key, u32 keyLen, f64 addon);
+    bool decrby(const s8* key, u32 keyLen, s32 addon);
+    bool stringlen(const s8* key, u32 keyLen);
+    bool append(const s8* key, u32 keyLen, const s8* value, u32 valLen);
+    bool setrange(const s8* key, u32 kenLen, const s8* value, u32 valLen, u32 offset);
+    bool getrange(const s8* key, u32 keyLen, s32 start, s32 end);
 
 
     //---------------------------------set---------------------------------
-    bool sdiff(const c8** keys, const u32* keyLens, u32 count);
-    bool sdiffstore(const c8* destKey, u32 destKeyLen, const c8** keys, const u32* keyLens, u32 count);
-    bool sunion(const c8** keys, const u32* keyLens, u32 count);
-    bool sunionstore(const c8* destKey, u32 destKeyLen, const c8** keys, const u32* keyLens, u32 count);
-    bool sinter(const c8** keys, const u32* keyLens, u32 count);
+    bool sdiff(const s8** keys, const u32* keyLens, u32 count);
+    bool sdiffstore(const s8* destKey, u32 destKeyLen, const s8** keys, const u32* keyLens, u32 count);
+    bool sunion(const s8** keys, const u32* keyLens, u32 count);
+    bool sunionstore(const s8* destKey, u32 destKeyLen, const s8** keys, const u32* keyLens, u32 count);
+    bool sinter(const s8** keys, const u32* keyLens, u32 count);
     //SINTERSTORE
-    bool sinterstore(const c8* destKey, u32 destKeyLen, const c8** keys, const u32* keyLens, u32 count);
-    bool sadd(const c8* key, u32 keyLen, const c8* val, const u32 valLens);
-    bool sadd(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    bool sinterstore(const s8* destKey, u32 destKeyLen, const s8** keys, const u32* keyLens, u32 count);
+    bool sadd(const s8* key, u32 keyLen, const s8* val, const u32 valLens);
+    bool sadd(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count);
     //SISMEMBER key member
-    bool sismember(const c8* key, u32 keyLen, const c8* val, const u32 valLens);
-    bool spop(const c8* key, u32 keyLen);
-    bool scard(const c8* key, u32 keyLen);
-    bool smembers(const c8* key, u32 keyLen);
+    bool sismember(const s8* key, u32 keyLen, const s8* val, const u32 valLens);
+    bool spop(const s8* key, u32 keyLen);
+    bool scard(const s8* key, u32 keyLen);
+    bool smembers(const s8* key, u32 keyLen);
     //SRANDMEMBER key [count]
-    bool srandmember(const c8* key, u32 keyLen, u32 count = 0);
-    bool srem(const c8* key, u32 keyLen, const c8* val, const u32 valLens);
-    bool srem(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
-    bool smove(const c8* key1, u32 keyLen1, const c8* key2, u32 keyLen2, const c8* val, const u32 valLen);
-    bool sscan(const c8* key, u32 keyLen, u32 offset, const c8* pattern, u32 patLen, u32 count = 0);
+    bool srandmember(const s8* key, u32 keyLen, u32 count = 0);
+    bool srem(const s8* key, u32 keyLen, const s8* val, const u32 valLens);
+    bool srem(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count);
+    bool smove(const s8* key1, u32 keyLen1, const s8* key2, u32 keyLen2, const s8* val, const u32 valLen);
+    bool sscan(const s8* key, u32 keyLen, u32 offset, const s8* pattern, u32 patLen, u32 count = 0);
 
 
     //---------------------------------zset---------------------------------
     /*
     * @brief ZADD key score member [[score member] [score member] …]
     */
-    bool zadd(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
-    bool zscore(const c8* key, u32 keyLen, const c8* val, const u32 valLens);
+    bool zadd(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count);
+    bool zscore(const s8* key, u32 keyLen, const s8* val, const u32 valLens);
     //ZINCRBY key increment member
-    bool zincrby(const c8* key, u32 keyLen, const c8* val, const u32 valLens, s32 value);
-    bool zcard(const c8* key, u32 keyLen);
+    bool zincrby(const s8* key, u32 keyLen, const s8* val, const u32 valLens, s32 value);
+    bool zcard(const s8* key, u32 keyLen);
     //ZCOUNT key min max
-    bool zcount(const c8* key, u32 keyLen, s32 min, s32 max);
+    bool zcount(const s8* key, u32 keyLen, s32 min, s32 max);
     //ZRANGE key start stop [WITHSCORES]
-    bool zrange(const c8* key, u32 keyLen, s32 start, s32 stop, bool withScore = false);
-    bool zrevrange(const c8* key, u32 keyLen, s32 start, s32 stop, bool withScore = false);
+    bool zrange(const s8* key, u32 keyLen, s32 start, s32 stop, bool withScore = false);
+    bool zrevrange(const s8* key, u32 keyLen, s32 start, s32 stop, bool withScore = false);
     /**
     * @brief ZRANGEBYSCORE key min max [WITHSCORES] [LIMIT offset count]
     * @param flag 位开关 1: >min, 2: -inf, 3: <max, 4: +inf
     */
-    bool zrangebyscore(const c8* key, u32 keyLen, f32 min, f32 max, u32 flag = 0, bool withScore = false);
+    bool zrangebyscore(const s8* key, u32 keyLen, f32 min, f32 max, u32 flag = 0, bool withScore = false);
     //ZREVRANGEBYSCORE key max min [WITHSCORES] [LIMIT offset count]
-    bool zrevrangebyscore(const c8* key, u32 keyLen, f32 min, f32 max, u32 flag = 0, bool withScore = false);
-    bool zrank(const c8* key, u32 keyLen, const c8* val, const u32 valLens);
-    bool zrevrank(const c8* key, u32 keyLen, const c8* val, const u32 valLens);
-    bool zrem(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    bool zrevrangebyscore(const s8* key, u32 keyLen, f32 min, f32 max, u32 flag = 0, bool withScore = false);
+    bool zrank(const s8* key, u32 keyLen, const s8* val, const u32 valLens);
+    bool zrevrank(const s8* key, u32 keyLen, const s8* val, const u32 valLens);
+    bool zrem(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count);
     //ZREMRANGEBYRANK key start stop
-    bool zremrangebyrank(const c8* key, u32 keyLen, s32 start, s32 stop);
+    bool zremrangebyrank(const s8* key, u32 keyLen, s32 start, s32 stop);
     //ZREMRANGEBYSCORE key min max
-    bool zremrangebyscore(const c8* key, u32 keyLen, f32 min, f32 max, u32 flag = 0);
+    bool zremrangebyscore(const s8* key, u32 keyLen, f32 min, f32 max, u32 flag = 0);
     //ZRANGEBYLEX key min max [LIMIT offset count]
-    bool zrangebylex(const c8* key, u32 keyLen, const c8* min, u32 minLen, const c8* max, u32 maxLen);
+    bool zrangebylex(const s8* key, u32 keyLen, const s8* min, u32 minLen, const s8* max, u32 maxLen);
     //ZLEXCOUNT key min max
-    bool zlexcount(const c8* key, u32 keyLen, const c8* min, u32 minLen, const c8* max, u32 maxLen);
+    bool zlexcount(const s8* key, u32 keyLen, const s8* min, u32 minLen, const s8* max, u32 maxLen);
     //ZREMRANGEBYLEX key min max
-    bool zremrangebylex(const c8* key, u32 keyLen, const c8* min, u32 minLen, const c8* max, u32 maxLen);
+    bool zremrangebylex(const s8* key, u32 keyLen, const s8* min, u32 minLen, const s8* max, u32 maxLen);
     //ZSCAN key cursor [MATCH pattern] [COUNT count]
-    bool zscan(const c8* key, u32 keyLen, u32 offset, const c8* pattern, u32 patLen, u32 count = 0);
+    bool zscan(const s8* key, u32 keyLen, u32 offset, const s8* pattern, u32 patLen, u32 count = 0);
     /**
     * @brief ZUNIONSTORE destination numkeys key [key …] [WEIGHTS weight [weight …]] [AGGREGATE SUM|MIN|MAX]
     * @note destkey used for slot calculate, cmd successed when all the keys should in same slots.
     * @param aggregate 0=SUM,1=MAX,-1=MIN
     */
-    bool zunionstore(const c8* destkey, u32 destkeyLen,
-        const c8** val, const u32* valLens,
-        const c8** weight, const u32* weightLens,
+    bool zunionstore(const s8* destkey, u32 destkeyLen,
+        const s8** val, const u32* valLens,
+        const s8** weight, const u32* weightLens,
         u32 count, s32 aggregate = 0);
     /**
     * @brief ZINTERSTORE destination numkeys key [key …] [WEIGHTS weight [weight …]] [AGGREGATE SUM|MIN|MAX]
@@ -240,45 +240,45 @@ public:
     * @see zunionstore
     * @param aggregate 0=SUM,1=MAX,-1=MIN
     */
-    bool zinterstore(const c8* destkey, u32 destkeyLen,
-        const c8** val, const u32* valLens,
-        const c8** weight, const u32* weightLens,
+    bool zinterstore(const s8* destkey, u32 destkeyLen,
+        const s8** val, const u32* valLens,
+        const s8** weight, const u32* weightLens,
         u32 count, s32 aggregate = 0);
 
     //---------------------------------hash---------------------------------
-    bool hset(const c8* key, u32 keyLen, const c8* name, u32 nameLen, const c8* value, u32 valLen);
-    bool hsetnx(const c8* key, u32 keyLen, const c8* name, u32 nameLen, const c8* value, u32 valLen);
-    bool hget(const c8* key, u32 keyLen, const c8* name, u32 nameLen);
-    bool hgetall(const c8* key, u32 keyLen);
-    bool hexists(const c8* key, u32 keyLen, const c8* name, u32 nameLen);
-    bool hdel(const c8* key, u32 keyLen, const c8* name, u32 nameLen);
-    bool hlen(const c8* key, u32 keyLen);
-    bool hstrlen(const c8* key, u32 keyLen, const c8* name, u32 nameLen);
-    bool hincrby(const c8* key, u32 keyLen, const c8* name, u32 nameLen, s32 val);
-    bool hincrbyfloat(const c8* key, u32 keyLen, const c8* name, u32 nameLen, f32 val);
-    bool hkeys(const c8* key, u32 keyLen);
-    bool hvals(const c8* key, u32 keyLen);
-    bool hscan(const c8* key, u32 keyLen, u32 offset, const c8* pattern, u32 patLen, u32 count = 0);
-    bool hmset(const c8* key, u32 keyLen, const c8** pairs, const u32* pairLens, u32 count);
-    bool hmget(const c8* key, u32 keyLen, const c8** name, const u32* nameLen, u32 count);
+    bool hset(const s8* key, u32 keyLen, const s8* name, u32 nameLen, const s8* value, u32 valLen);
+    bool hsetnx(const s8* key, u32 keyLen, const s8* name, u32 nameLen, const s8* value, u32 valLen);
+    bool hget(const s8* key, u32 keyLen, const s8* name, u32 nameLen);
+    bool hgetall(const s8* key, u32 keyLen);
+    bool hexists(const s8* key, u32 keyLen, const s8* name, u32 nameLen);
+    bool hdel(const s8* key, u32 keyLen, const s8* name, u32 nameLen);
+    bool hlen(const s8* key, u32 keyLen);
+    bool hstrlen(const s8* key, u32 keyLen, const s8* name, u32 nameLen);
+    bool hincrby(const s8* key, u32 keyLen, const s8* name, u32 nameLen, s32 val);
+    bool hincrbyfloat(const s8* key, u32 keyLen, const s8* name, u32 nameLen, f32 val);
+    bool hkeys(const s8* key, u32 keyLen);
+    bool hvals(const s8* key, u32 keyLen);
+    bool hscan(const s8* key, u32 keyLen, u32 offset, const s8* pattern, u32 patLen, u32 count = 0);
+    bool hmset(const s8* key, u32 keyLen, const s8** pairs, const u32* pairLens, u32 count);
+    bool hmget(const s8* key, u32 keyLen, const s8** name, const u32* nameLen, u32 count);
 
     //---------------------------------HyperLogLog---------------------------------
     //PFADD key element [element …]
-    bool pfadd(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    bool pfadd(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count);
     //PFCOUNT key [key …]
-    bool pfcount(const c8** val, const u32* valLens, u32 count);
+    bool pfcount(const s8** val, const u32* valLens, u32 count);
     /**
     * @brief PFMERGE destkey sourcekey [sourcekey …]
     * @param count src keys count
     */
-    bool pafmerge(const c8* destkey, u32 destkeyLen, const c8** srckeys, const u32* srcLens, u32 count);
+    bool pafmerge(const s8* destkey, u32 destkeyLen, const s8** srckeys, const u32* srcLens, u32 count);
 
 
     //---------------------------------GEO---------------------------------
     //GEOADD key longitude latitude member [longitude latitude member …]
-    bool geoadd(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    bool geoadd(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count);
     //GEOPOS key member [member …]
-    bool geopos(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    bool geopos(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count);
     /**
     * @brief GEODIST key member1 member2 [unit]
     * unit=
@@ -287,16 +287,16 @@ public:
     * 2=mi 表示单位为英里。
     * 3=ft 表示单位为英尺。
     */
-    bool geodist(const c8* key, u32 keyLen,
-        const c8* key1, u32 keyLen1,
-        const c8* key2, u32 keyLen2, u32 unit = 0);
+    bool geodist(const s8* key, u32 keyLen,
+        const s8* key1, u32 keyLen1,
+        const s8* key2, u32 keyLen2, u32 unit = 0);
 
     /**
     * @brief GEORADIUS key longitude latitude radius m|km|ft|mi [WITHCOORD] [WITHDIST] [WITHHASH] [ASC|DESC] [COUNT count]
     * @param unit @see geodist()
     * @param flag 1=WITHCOORD,2=WITHDIST,4=WITHHASH,8=ASC|DESC
     */
-    bool georadius(const c8* key, u32 keyLen,
+    bool georadius(const s8* key, u32 keyLen,
         f32 posX, f32 posY, f32 redius, u32 max = 0, u32 unit = 0, u32 flag = 0);
 
     /**
@@ -304,58 +304,58 @@ public:
     * @param unit @see geodist()
     * @param flag 1=WITHCOORD,2=WITHDIST,4=WITHHASH,8=ASC|DESC
     */
-    bool georadiusbymember(const c8* key, u32 keyLen,
-        const c8* member, u32 memberLen, f32 redius, u32 max = 0, u32 unit = 0, u32 flag = 0);
+    bool georadiusbymember(const s8* key, u32 keyLen,
+        const s8* member, u32 memberLen, f32 redius, u32 max = 0, u32 unit = 0, u32 flag = 0);
     /**
     * @brief GEOHASH key member [member …]
     */
-    bool geohash(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    bool geohash(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count);
 
 
     //---------------------------------BITMAP---------------------------------
     /**
     * @brief SETBIT key offset value
     */
-    bool setbit(const c8* key, u32 keyLen, u32 offset, bool val);
+    bool setbit(const s8* key, u32 keyLen, u32 offset, bool val);
     /**
     * @brief GETBIT key offset
     */
-    bool getbit(const c8* key, u32 keyLen, u32 offset);
+    bool getbit(const s8* key, u32 keyLen, u32 offset);
 
     /**
     * @brief BITCOUNT key[start][end]
     */
-    bool bitcount(const c8* key, u32 keyLen, u32 min = 0, u32 max = 0xFFFFFFFF);
+    bool bitcount(const s8* key, u32 keyLen, u32 min = 0, u32 max = 0xFFFFFFFF);
 
     /**
     * @brief BITPOS key bit [start] [end]
     */
-    bool bitpos(const c8* key, u32 keyLen, bool val, u32 min = 0, u32 max = 0xFFFFFFFF);
+    bool bitpos(const s8* key, u32 keyLen, bool val, u32 min = 0, u32 max = 0xFFFFFFFF);
 
     /**
     * @brief BITOP operation destkey key [key …]
     * @param flag 0=AND,1=OR,2=NOT,3=XOR
     */
-    bool bitop(const c8* destkey, u32 destkeyLen, u32 flag,
-        const c8** val, const u32* valLens, u32 count);
+    bool bitop(const s8* destkey, u32 destkeyLen, u32 flag,
+        const s8** val, const u32* valLens, u32 count);
     /**
     * @brief BITFIELD key [GET type offset] [SET type offset value] [INCRBY type offset increment] [OVERFLOW WRAP|SAT|FAIL]
     * @param 
     */
-    bool bitfiled(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count);
+    bool bitfiled(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count);
 
 
     //---------------------------------Publish---------------------------------
     //PUBLISH channel message
-    bool publish(const c8* key, u32 keyLen, const c8* val, const u32 valLen);
+    bool publish(const s8* key, u32 keyLen, const s8* val, const u32 valLen);
     //SUBSCRIBE channel [channel …]
-    bool subscribe(const c8** val, const u32* valLens, u32 count);
+    bool subscribe(const s8** val, const u32* valLens, u32 count);
     //UNSUBSCRIBE [channel [channel …]]
-    bool unsubscribe(const c8** val = nullptr, const u32* valLens = nullptr, u32 count = 0);
+    bool unsubscribe(const s8** val = nullptr, const u32* valLens = nullptr, u32 count = 0);
     //PSUBSCRIBE pattern [pattern …]
-    bool psubscribe(const c8** val, const u32* valLens, u32 count);
+    bool psubscribe(const s8** val, const u32* valLens, u32 count);
     //PUNSUBSCRIBE [pattern [pattern …]]
-    bool punsubscribe(const c8** val = nullptr, const u32* valLens = nullptr, u32 count = 0);
+    bool punsubscribe(const s8** val = nullptr, const u32* valLens = nullptr, u32 count = 0);
     //PUBSUB <subcommand> [argument [argument …]]
     //TODO>>PUBSUB
 
@@ -366,5 +366,5 @@ private:
 
 
 } //namespace db {
-} // namespace irr
+} // namespace app
 

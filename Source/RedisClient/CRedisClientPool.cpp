@@ -1,12 +1,12 @@
 #include "CRedisClientPool.h"
 #include "CRedisClient.h"
-#include "IAppLogger.h"
+#include "CLogger.h"
 #include "CMemoryHub.h"
 #include "CRedisRequest.h"
 #include "HAtomicOperator.h"
 
 
-namespace irr {
+namespace app {
 namespace db {
 
 void AppPoolCallback(CRedisRequest* it, CRedisResponse* res) {
@@ -31,6 +31,7 @@ CRedisClientPool::CRedisClientPool(net::CNetServiceTCP* iServer) :
     mServer(iServer),
     mDatabaseID(0),
     mFlyCount(0),
+    mMaxRetry(2),
     mRunning(false),
     mMaxTCP(3) {
     memset(mPassword, 0, sizeof(mPassword));
@@ -77,14 +78,14 @@ void CRedisClientPool::deleteSession(CRedisClient* it) {
 }
 
 void CRedisClientPool::open(const net::CNetAddress& serverIP, s32 maxTCP,
-    const c8* passowrd, s32 dbID) {
+    const s8* passowrd, s32 dbID) {
     if (mRunning) {
         return;
     }
     mRunning = true;
     mRemoterAddr = serverIP;
     mDatabaseID = dbID;
-    mMaxTCP = maxTCP;
+    mMaxTCP = maxTCP < 2 ? 2 : maxTCP;
     setPassword(passowrd);
     for (u64 i = 0; i < mMaxTCP; ++i) {
         CRedisClient* it = createSession();
@@ -95,7 +96,7 @@ void CRedisClientPool::open(const net::CNetAddress& serverIP, s32 maxTCP,
         if (!it->open()) {
             mQueueWait.delinkNode(nd);
             deleteSession(it);
-            IAppLogger::logError("redis", "fail to open connect,server=%s:%u",
+            CLogger::logError("redis", "fail to open connect,server=%s:%u",
                 serverIP.getIPString(), serverIP.getPort());
         }
     }
@@ -163,7 +164,7 @@ void CRedisClientPool::push(CRedisClient* it) {
     }
 }
 
-void CRedisClientPool::setPassword(const c8* pass) {
+void CRedisClientPool::setPassword(const s8* pass) {
     if (pass && *pass) {
         memcpy(mPassword, pass, core::min_(sizeof(mPassword) - 1, 1 + strlen(pass)));
     }
@@ -201,5 +202,5 @@ void CRedisClientPool::close() {
 }
 
 } //namespace db {
-} // namespace irr
+} // namespace app
 

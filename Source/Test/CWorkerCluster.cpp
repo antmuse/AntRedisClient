@@ -1,6 +1,6 @@
 #include "CWorkerCluster.h"
 
-namespace irr {
+namespace app {
 
 
 void AppRedisClusterCallback(db::CRedisRequest* it, db::CRedisResponse* res) {
@@ -31,8 +31,8 @@ void CWorkerCluster::callback(db::CRedisRequest* it, db::CRedisResponse* res) {
 
 void CWorkerCluster::run() {
     //return;
-    c8 key[128];
-    c8 val[128];
+    s8 key[128];
+    s8 val[128];
     for(s32 i = 0; mRunning && i < 1000; i++) {
         snprintf(key, sizeof(key), "tk%d", i + 1);
         snprintf(val, sizeof(val), "redvalue-index-%d", i + 1);
@@ -56,10 +56,20 @@ void CWorkerCluster::run() {
         con->setCallback(AppRedisClusterCallback);
         con->setUserPointer(this);
         con->setClientCluster(&mRedisPool);
-        if(!con->get(key)) {
-            printf("redis get str failed\n");
-        } else {
+        if(con->get(key)) {
             AppAtomicIncrementFetch(&mFly);
+            db::CRedisRequest* con2 = new db::CRedisRequest();
+            con2->setCallback(AppRedisClusterCallback);
+            con2->setUserPointer(this);
+            con2->setClientCluster(&mRedisPool);
+            if(con2->expire(key, 60)) {
+                AppAtomicIncrementFetch(&mFly);
+            } else {
+                printf("redis expire failed\n");
+            }
+            con2->drop();
+        } else {
+            printf("redis get str failed\n");
         }
         con->drop();
     }

@@ -1,11 +1,11 @@
 #include "CRedisClientCluster.h"
 #include "CRedisClient.h"
-#include "IAppLogger.h"
+#include "CLogger.h"
 #include "CMemoryHub.h"
 #include "CRedisRequest.h"
 
 
-namespace irr {
+namespace app {
 namespace db {
 
 void AppClusterCallback(CRedisRequest* it, CRedisResponse* res) {
@@ -26,7 +26,7 @@ CRedisClientCluster::CRedisClientCluster(net::CNetServiceTCP* iServer) :
 }
 
 CRedisClientCluster::~CRedisClientCluster() {
-    core::map<net::CNetAddress::ID, CRedisClientPool*>::Iterator nd = mAllPool.getIterator();
+    core::TMap<net::CNetAddress::ID, CRedisClientPool*>::Iterator nd = mAllPool.getIterator();
     while (!nd.atEnd()) {
         CRedisClientPool* pool = nd->getValue();
         delete pool;
@@ -48,7 +48,7 @@ void CRedisClientCluster::updateSlots(CRedisResponse* res) {
     }
     res->show();
     net::CNetAddress addr;
-    c8* ids;
+    s8* ids;
     for (u32 i = 0; i < res->mAllocated; ++i) {
         CRedisResponse* ndj = res->getResult(i);
         u64 slot1 = ndj->getResult(0)->getS64();
@@ -70,7 +70,7 @@ void CRedisClientCluster::updateSlots(CRedisResponse* res) {
     mStatus = 3;
 }
 
-void CRedisClientCluster::setPassword(const c8* ipport, const c8* passowrd) {
+void CRedisClientCluster::setPassword(const s8* ipport, const s8* passowrd) {
     if (nullptr == ipport) {
         return;
     }
@@ -79,19 +79,19 @@ void CRedisClientCluster::setPassword(const c8* ipport, const c8* passowrd) {
     setPassword(addr, passowrd);
 }
 
-void CRedisClientCluster::setPassword(const net::CNetAddress& addr, const c8* passowrd) {
+void CRedisClientCluster::setPassword(const net::CNetAddress& addr, const s8* passowrd) {
     if (nullptr == passowrd) {
         return;
     }
-    core::stringc pass(passowrd);
+    core::CString pass(passowrd);
 
     CAutoLock ak(mMutex);
     mPassword.insert(addr.getID(), pass);
 }
 
-bool CRedisClientCluster::getPassword(const net::CNetAddress::ID& ipport, core::stringc& passowrd) {
+bool CRedisClientCluster::getPassword(const net::CNetAddress::ID& ipport, core::CString& passowrd) {
     CAutoLock ak(mMutex);
-    core::map<net::CNetAddress::ID, core::stringc>::Node* nd =
+    core::TMap<net::CNetAddress::ID, core::CString>::Node* nd =
         mPassword.find(ipport);
     if (nullptr == nd) {
         return false;
@@ -100,7 +100,7 @@ bool CRedisClientCluster::getPassword(const net::CNetAddress::ID& ipport, core::
     return true;
 }
 
-CRedisClientPool* CRedisClientCluster::set(const c8* ipport, u32 maxTCP, const c8* passowrd) {
+CRedisClientPool* CRedisClientCluster::set(const s8* ipport, u32 maxTCP, const s8* passowrd) {
     if (nullptr == ipport) {
         return nullptr;
     }
@@ -109,12 +109,12 @@ CRedisClientPool* CRedisClientCluster::set(const c8* ipport, u32 maxTCP, const c
     return set(addr, maxTCP, passowrd);
 }
 
-CRedisClientPool* CRedisClientCluster::set(const net::CNetAddress& addr, u32 maxTCP, const c8* passowrd) {
+CRedisClientPool* CRedisClientCluster::set(const net::CNetAddress& addr, u32 maxTCP, const s8* passowrd) {
     maxTCP = core::clamp(maxTCP, 1U, mMaxTCP);
 
     CAutoLock ak(mMutex);
 
-    core::map<net::CNetAddress::ID, CRedisClientPool*>::Node* nd = mAllPool.find(addr.getID());
+    core::TMap<net::CNetAddress::ID, CRedisClientPool*>::Node* nd = mAllPool.find(addr.getID());
     if (nd) {
         return nd->getValue();
     }
@@ -125,7 +125,7 @@ CRedisClientPool* CRedisClientCluster::set(const net::CNetAddress& addr, u32 max
         return nullptr;
     }
 
-    core::stringc pass(passowrd);
+    core::CString pass(passowrd);
     if (nullptr == passowrd) {
         if (!getPassword(addr.getID(), pass)) {
             return nullptr;
@@ -180,7 +180,7 @@ void CRedisClientCluster::close() {
         return;
     }
     mStatus = false;
-    core::map<net::CNetAddress::ID, CRedisClientPool*>::Iterator nd = mAllPool.getIterator();
+    core::TMap<net::CNetAddress::ID, CRedisClientPool*>::Iterator nd = mAllPool.getIterator();
     while (!nd.atEnd()) {
         CRedisClientPool* pool = nd->getValue();
         pool->close();
@@ -217,7 +217,7 @@ CRedisClientPool* CRedisClientCluster::getBySlot(u32 it) {
     return ret;
 }
 
-CRedisClientPool* CRedisClientCluster::getByAddress(const c8* iport) {
+CRedisClientPool* CRedisClientCluster::getByAddress(const s8* iport) {
     if (nullptr == iport) {
         return nullptr;
     }
@@ -227,5 +227,5 @@ CRedisClientPool* CRedisClientCluster::getByAddress(const c8* iport) {
 }
 
 } //namespace db {
-} // namespace irr
+} // namespace app
 

@@ -2,7 +2,7 @@
 #include "IUtility.h"
 
 
-namespace irr {
+namespace app {
 namespace db {
 
 //const static u32 valsize = sizeof(CRedisResponse);
@@ -60,7 +60,7 @@ void CRedisResponse::clear() {
     mValue.mValStr = nullptr;
 }
 
-bool CRedisResponse::decodeSize(const c8 ch) {
+bool CRedisResponse::decodeSize(const s8 ch) {
     if ('\r' == ch) {
         return false;
     }
@@ -71,8 +71,8 @@ bool CRedisResponse::decodeSize(const c8 ch) {
     return ('\n' == ch);
 }
 
-const c8* CRedisResponse::import(const c8* str, u64 len) {
-    const c8* const end = str + len;
+const s8* CRedisResponse::import(const s8* str, u64 len) {
+    const s8* const end = str + len;
     for (; str < end; ++str) {
         switch (mStatus) {
         case EDS_INT:
@@ -90,7 +90,7 @@ const c8* CRedisResponse::import(const c8* str, u64 len) {
             case ERRT_ERROR:
             case ERRT_STRING:
                 mAllocated = 120;
-                mValue.mValStr = reinterpret_cast<c8*>(mHub.allocateAndClear(mAllocated));
+                mValue.mValStr = reinterpret_cast<s8*>(mHub.allocateAndClear(mAllocated));
                 mStatus = EDS_STR;
                 break;
             case ERRT_BULK_STR:
@@ -123,7 +123,7 @@ const c8* CRedisResponse::import(const c8* str, u64 len) {
             } else if ('\r' != str[0]) {
                 if (mUsed + 1 >= mAllocated) {
                     mAllocated += 32;
-                    c8* nstr = reinterpret_cast<c8*>(mHub.allocateAndClear(mAllocated));
+                    s8* nstr = reinterpret_cast<s8*>(mHub.allocateAndClear(mAllocated));
                     memcpy(nstr, mValue.mValStr, mUsed);
                     mHub.release(mValue.mValStr);
                     mValue.mValStr = nstr;
@@ -171,7 +171,7 @@ const c8* CRedisResponse::import(const c8* str, u64 len) {
                 mUsed = 0;
                 if (mValue.mVal64 > 0) {
                     mAllocated = mValue.mVal64 + 1;
-                    mValue.mValStr = reinterpret_cast<c8*>(mHub.allocateAndClear(mAllocated));
+                    mValue.mValStr = reinterpret_cast<s8*>(mHub.allocateAndClear(mAllocated));
                 } else if (0 == mValue.mVal64) {
                     mStatus = EDS_DONE; //empty str
                 } else {
@@ -193,7 +193,7 @@ const c8* CRedisResponse::import(const c8* str, u64 len) {
     return str;
 }
 
-void CRedisResponse::makeError(const c8* str) {
+void CRedisResponse::makeError(const s8* str) {
     str = (nullptr == str ? "unknown" : str);
     clear();
     mStatus = EDS_DONE;
@@ -237,4 +237,4 @@ void CRedisResponse::show(u32 level, u32 index)const {
 }
 
 } //namespace db {
-} // namespace irr
+} // namespace app

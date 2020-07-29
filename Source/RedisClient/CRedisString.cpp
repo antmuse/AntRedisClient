@@ -1,9 +1,9 @@
 #include "CRedisRequest.h"
 
-namespace irr {
+namespace app {
 namespace db {
 
-bool CRedisRequest::set(const c8* key, const c8* value) {
+bool CRedisRequest::set(const s8* key, const s8* value) {
     if (nullptr == key || nullptr == value) {
         return false;
     }
@@ -11,12 +11,12 @@ bool CRedisRequest::set(const c8* key, const c8* value) {
         value, static_cast<u32>(::strlen(value)));
 }
 
-bool CRedisRequest::set(const c8* key, u32 keyLen,
-    const c8* value, u32 valLen) {
+bool CRedisRequest::set(const s8* key, u32 keyLen,
+    const s8* value, u32 valLen) {
     if (nullptr == key || 0 == keyLen || nullptr == value || 0 == valLen) {
         return false;
     }
-    const c8* argv[3];
+    const s8* argv[3];
     u32 lens[3];
     argv[0] = "SET";
     lens[0] = 3;
@@ -33,13 +33,13 @@ bool CRedisRequest::set(const c8* key, u32 keyLen,
     return launch(3, argv, lens);
 }
 
-bool CRedisRequest::getset(const c8* key, u32 keyLen,
-    const c8* value, u32 valLen) {
+bool CRedisRequest::getset(const s8* key, u32 keyLen,
+    const s8* value, u32 valLen) {
     if (nullptr == key || 0 == keyLen || nullptr == value || 0 == valLen) {
         return false;
     }
     const u32 cnt = 3;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "GETSET";
     lens[0] = sizeof("GETSET") - 1;
@@ -56,12 +56,12 @@ bool CRedisRequest::getset(const c8* key, u32 keyLen,
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::setnx(const c8* key, u32 keyLen,
-    const c8* value, u32 valLen) {
+bool CRedisRequest::setnx(const s8* key, u32 keyLen,
+    const s8* value, u32 valLen) {
     if (nullptr == key || 0 == keyLen || nullptr == value || 0 == valLen) {
         return false;
     }
-    const c8* argv[3];
+    const s8* argv[3];
     u32 lens[3];
     argv[0] = "SETNX";
     lens[0] = sizeof("SETNX") - 1;
@@ -78,19 +78,19 @@ bool CRedisRequest::setnx(const c8* key, u32 keyLen,
     return launch(3, argv, lens);
 }
 
-bool CRedisRequest::get(const c8* key) {
+bool CRedisRequest::get(const s8* key) {
     if (nullptr == key) {
         return false;
     }
     return get(key, static_cast<u32>(::strlen(key)));
 }
 
-bool CRedisRequest::get(const c8* key, u32 len) {
+bool CRedisRequest::get(const s8* key, u32 len) {
     if (nullptr == key || 0 == len) {
         return false;
     }
     const u32 cnt = 2;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
 
     argv[0] = "GET";
@@ -105,12 +105,12 @@ bool CRedisRequest::get(const c8* key, u32 len) {
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::incr(const c8* key, u32 len) {
+bool CRedisRequest::incr(const s8* key, u32 len) {
     if (nullptr == key || 0 == len) {
         return false;
     }
     const u32 cnt = 2;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
 
     argv[0] = "INCR";
@@ -125,12 +125,12 @@ bool CRedisRequest::incr(const c8* key, u32 len) {
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::incrby(const c8* key, u32 len, s32 addon) {
+bool CRedisRequest::incrby(const s8* key, u32 len, s32 addon) {
     if (nullptr == key || 0 == len) {
         return false;
     }
     const u32 cnt = 3;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
 
     argv[0] = "INCRBY";
@@ -139,7 +139,7 @@ bool CRedisRequest::incrby(const c8* key, u32 len, s32 addon) {
     argv[1] = key;
     lens[1] = len;
 
-    c8 buf[16];
+    s8 buf[16];
     snprintf(buf, sizeof(buf), "%d", addon);
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
@@ -150,12 +150,12 @@ bool CRedisRequest::incrby(const c8* key, u32 len, s32 addon) {
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::decr(const c8* key, u32 len) {
+bool CRedisRequest::decr(const s8* key, u32 len) {
     if (nullptr == key || 0 == len) {
         return false;
     }
     const u32 cnt = 2;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
 
     argv[0] = "DECR";
@@ -170,12 +170,12 @@ bool CRedisRequest::decr(const c8* key, u32 len) {
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::decrby(const c8* key, u32 len, s32 addon) {
+bool CRedisRequest::decrby(const s8* key, u32 len, s32 addon) {
     if (nullptr == key || 0 == len) {
         return false;
     }
     const u32 cnt = 3;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
 
     argv[0] = "DECRBY";
@@ -184,7 +184,7 @@ bool CRedisRequest::decrby(const c8* key, u32 len, s32 addon) {
     argv[1] = key;
     lens[1] = len;
 
-    c8 buf[16];
+    s8 buf[16];
     snprintf(buf, sizeof(buf), "%d", addon);
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
@@ -195,12 +195,12 @@ bool CRedisRequest::decrby(const c8* key, u32 len, s32 addon) {
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::incrbyfloat(const c8* key, u32 len, f64 addon) {
+bool CRedisRequest::incrbyfloat(const s8* key, u32 len, f64 addon) {
     if (nullptr == key || 0 == len) {
         return false;
     }
     const u32 cnt = 3;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
 
     argv[0] = "INCRBYFLOAT";
@@ -209,7 +209,7 @@ bool CRedisRequest::incrbyfloat(const c8* key, u32 len, f64 addon) {
     argv[1] = key;
     lens[1] = len;
 
-    c8 buf[64];
+    s8 buf[64];
     snprintf(buf, sizeof(buf), "%lf", addon);
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
@@ -220,12 +220,12 @@ bool CRedisRequest::incrbyfloat(const c8* key, u32 len, f64 addon) {
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::stringlen(const c8* key, u32 len) {
+bool CRedisRequest::stringlen(const s8* key, u32 len) {
     if (nullptr == key || 0 == len) {
         return false;
     }
     const u32 cnt = 2;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
 
     argv[0] = "STRLEN";
@@ -240,12 +240,12 @@ bool CRedisRequest::stringlen(const c8* key, u32 len) {
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::setex(const c8* key, u32 keyLen, const c8* value, u32 valLen, u32 timeout) {
+bool CRedisRequest::setex(const s8* key, u32 keyLen, const s8* value, u32 valLen, u32 timeout) {
     if (nullptr == key || 0 == keyLen || nullptr == value || 0 == valLen) {
         return false;
     }
     const u32 cnt = 4;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "SETEX";
     lens[0] = sizeof("SETEX") - 1;
@@ -253,7 +253,7 @@ bool CRedisRequest::setex(const c8* key, u32 keyLen, const c8* value, u32 valLen
     argv[1] = key;
     lens[1] = keyLen;
 
-    c8 buf[16];
+    s8 buf[16];
     snprintf(buf, sizeof(buf), "%u", timeout);
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
@@ -267,12 +267,12 @@ bool CRedisRequest::setex(const c8* key, u32 keyLen, const c8* value, u32 valLen
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::psetex(const c8* key, u32 keyLen, const c8* value, u32 valLen, u32 timeout) {
+bool CRedisRequest::psetex(const s8* key, u32 keyLen, const s8* value, u32 valLen, u32 timeout) {
     if (nullptr == key || 0 == keyLen || nullptr == value || 0 == valLen) {
         return false;
     }
     const u32 cnt = 4;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "PSETEX";
     lens[0] = sizeof("PSETEX") - 1;
@@ -280,7 +280,7 @@ bool CRedisRequest::psetex(const c8* key, u32 keyLen, const c8* value, u32 valLe
     argv[1] = key;
     lens[1] = keyLen;
 
-    c8 buf[16];
+    s8 buf[16];
     snprintf(buf, sizeof(buf), "%u", timeout);
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
@@ -294,13 +294,13 @@ bool CRedisRequest::psetex(const c8* key, u32 keyLen, const c8* value, u32 valLe
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::append(const c8* key, u32 keyLen,
-    const c8* value, u32 valLen) {
+bool CRedisRequest::append(const s8* key, u32 keyLen,
+    const s8* value, u32 valLen) {
     if (nullptr == key || 0 == keyLen || nullptr == value || 0 == valLen) {
         return false;
     }
     const u32 cnt = 3;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "APPEND";
     lens[0] = sizeof("APPEND") - 1;
@@ -318,12 +318,12 @@ bool CRedisRequest::append(const c8* key, u32 keyLen,
 }
 
 
-bool CRedisRequest::setrange(const c8* key, u32 keyLen, const c8* value, u32 valLen, u32 offset) {
+bool CRedisRequest::setrange(const s8* key, u32 keyLen, const s8* value, u32 valLen, u32 offset) {
     if (nullptr == key || 0 == keyLen || nullptr == value || 0 == valLen) {
         return false;
     }
     const u32 cnt = 4;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "SETRANGE";
     lens[0] = sizeof("SETRANGE") - 1;
@@ -331,7 +331,7 @@ bool CRedisRequest::setrange(const c8* key, u32 keyLen, const c8* value, u32 val
     argv[1] = key;
     lens[1] = keyLen;
 
-    c8 buf[16];
+    s8 buf[16];
     snprintf(buf, sizeof(buf), "%u", offset);
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
@@ -346,12 +346,12 @@ bool CRedisRequest::setrange(const c8* key, u32 keyLen, const c8* value, u32 val
 }
 
 
-bool CRedisRequest::getrange(const c8* key, u32 keyLen, s32 start, s32 end) {
+bool CRedisRequest::getrange(const s8* key, u32 keyLen, s32 start, s32 end) {
     if (nullptr == key || 0 == keyLen) {
         return false;
     }
     const u32 cnt = 4;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "GETRANGE";
     lens[0] = sizeof("GETRANGE") - 1;
@@ -359,12 +359,12 @@ bool CRedisRequest::getrange(const c8* key, u32 keyLen, s32 start, s32 end) {
     argv[1] = key;
     lens[1] = keyLen;
 
-    c8 buf[16];
+    s8 buf[16];
     snprintf(buf, sizeof(buf), "%d", start);
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
 
-    c8 buf2[16];
+    s8 buf2[16];
     snprintf(buf2, sizeof(buf2), "%d", end);
     argv[3] = buf2;
     lens[3] = (u32)::strlen(buf2);
@@ -375,27 +375,27 @@ bool CRedisRequest::getrange(const c8* key, u32 keyLen, s32 start, s32 end) {
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::mset(const c8** key, const u32* keyLen, u32 count) {
+bool CRedisRequest::mset(const s8** key, const u32* keyLen, u32 count) {
     if (nullptr == key || 0 == keyLen) {
         return false;
     }
     const u32 start = 1;
     const u32 maxcache = 128;
-    c8* tmp_argv[maxcache + start];
+    s8* tmp_argv[maxcache + start];
     u32 tmp_size[maxcache + start];
     const u32 cnt = start + count;
-    c8** argv = count > maxcache ? new c8*[cnt] : tmp_argv;
+    s8** argv = count > maxcache ? new s8*[cnt] : tmp_argv;
     u32* lens = count > maxcache ? new u32[cnt] : tmp_size;
 
     argv[0] = "MSET";
     lens[0] = sizeof("MSET") - 1;
 
     for (u32 i = 0; i < count; ++i) {
-        argv[i + start] = const_cast<c8*>(key[i]);
+        argv[i + start] = const_cast<s8*>(key[i]);
         lens[i + start] = keyLen[i];
     }
 
-    bool ret = launch(cnt, const_cast<const c8**>(argv), lens);
+    bool ret = launch(cnt, const_cast<const s8**>(argv), lens);
     if (count > maxcache) {
         delete[] argv;
         delete[] lens;
@@ -403,28 +403,28 @@ bool CRedisRequest::mset(const c8** key, const u32* keyLen, u32 count) {
     return ret;
 }
 
-bool CRedisRequest::mget(const c8** key, const u32* keyLen, u32 count) {
+bool CRedisRequest::mget(const s8** key, const u32* keyLen, u32 count) {
     if (nullptr == key || 0 == keyLen) {
         return false;
     }
 
     const u32 start = 1;
     const u32 maxcache = 128;
-    c8* tmp_argv[maxcache + start];
+    s8* tmp_argv[maxcache + start];
     u32 tmp_size[maxcache + start];
     const u32 cnt = start + count;
-    c8** argv = count > maxcache ? new c8*[cnt] : tmp_argv;
+    s8** argv = count > maxcache ? new s8*[cnt] : tmp_argv;
     u32* lens = count > maxcache ? new u32[cnt] : tmp_size;
 
     argv[0] = "MGET";
     lens[0] = sizeof("MGET") - 1;
 
     for (u32 i = 0; i < count; ++i) {
-        argv[i + start] = const_cast<c8*>(key[i]);
+        argv[i + start] = const_cast<s8*>(key[i]);
         lens[i + start] = keyLen[i];
     }
 
-    bool ret = launch(cnt, const_cast<const c8**>(argv), lens);
+    bool ret = launch(cnt, const_cast<const s8**>(argv), lens);
     if (count > maxcache) {
         delete[] argv;
         delete[] lens;
@@ -432,28 +432,28 @@ bool CRedisRequest::mget(const c8** key, const u32* keyLen, u32 count) {
     return ret;
 }
 
-bool CRedisRequest::msetnx(const c8** key, const u32* keyLen, u32 count) {
+bool CRedisRequest::msetnx(const s8** key, const u32* keyLen, u32 count) {
     if (nullptr == key || 0 == keyLen) {
         return false;
     }
     const u32 cnt = 1 + count;
-    c8** argv = new c8*[cnt];
+    s8** argv = new s8*[cnt];
     u32* lens = new u32[cnt];
 
     argv[0] = "MSETNX";
     lens[0] = sizeof("MSETNX") - 1;
 
     for (u32 i = 1; i <= count; ++i) {
-        argv[i] = const_cast<c8*>(key[i]);
+        argv[i] = const_cast<s8*>(key[i]);
         lens[i] = keyLen[i];
     }
 
-    bool ret = launch(cnt, const_cast<const c8**>(argv), lens);
+    bool ret = launch(cnt, const_cast<const s8**>(argv), lens);
     delete[] argv;
     delete[] lens;
     return ret;
 }
 
 } //namespace db {
-} // namespace irr
+} // namespace app
 

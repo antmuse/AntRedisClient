@@ -1,14 +1,14 @@
 #include "CRedisRequest.h"
 
-namespace irr {
+namespace app {
 namespace db {
 
 
-bool CRedisRequest::auth(const c8* passowrd) {
+bool CRedisRequest::auth(const s8* passowrd) {
     if (nullptr == passowrd) {
         return false;
     }
-    const c8* argv[2];
+    const s8* argv[2];
     argv[0] = "AUTH";
     argv[1] = passowrd;
     u32 lens[2];
@@ -17,11 +17,11 @@ bool CRedisRequest::auth(const c8* passowrd) {
     return launch(2, argv, lens);
 }
 
-bool CRedisRequest::echo(const c8* msg) {
+bool CRedisRequest::echo(const s8* msg) {
     if (nullptr == msg) {
         return false;
     }
-    const c8* argv[2];
+    const s8* argv[2];
     argv[0] = "ECHO";
     argv[1] = msg;
     u32 lens[2];
@@ -31,9 +31,9 @@ bool CRedisRequest::echo(const c8* msg) {
 }
 
 bool CRedisRequest::select(s32 dbID) {
-    c8 dbstr[32];
+    s8 dbstr[32];
     itoa(dbID, dbstr, 10);
-    const c8* argv[2];
+    const s8* argv[2];
     argv[0] = "SELECT";
     argv[1] = dbstr;
     u32 lens[2];
@@ -43,7 +43,7 @@ bool CRedisRequest::select(s32 dbID) {
 }
 
 bool CRedisRequest::ping() {
-    const c8* argv[1];
+    const s8* argv[1];
     argv[0] = "PING";
     u32 lens[1];
     lens[0] = 4;
@@ -51,7 +51,7 @@ bool CRedisRequest::ping() {
 }
 
 bool CRedisRequest::quit() {
-    const c8* argv[1];
+    const s8* argv[1];
     argv[0] = "QUIT";
     u32 lens[1];
     lens[0] = 4;
@@ -60,7 +60,7 @@ bool CRedisRequest::quit() {
 
 
 bool CRedisRequest::shutdown() {
-    const c8* argv[1];
+    const s8* argv[1];
     argv[0] = "SHUTDOWN";
     u32 lens[1];
     lens[0] = 8;
@@ -69,7 +69,7 @@ bool CRedisRequest::shutdown() {
 
 bool CRedisRequest::save() {
     const u32 cnt = 1;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "SAVE";
     lens[0] = sizeof("SAVE") - 1;
@@ -79,7 +79,7 @@ bool CRedisRequest::save() {
 
 bool CRedisRequest::bgsave() {
     const u32 cnt = 1;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "BGSAVE";
     lens[0] = sizeof("BGSAVE") - 1;
@@ -89,7 +89,7 @@ bool CRedisRequest::bgsave() {
 
 bool CRedisRequest::bgrewriteaof() {
     const u32 cnt = 1;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "BGREWRITEAOF";
     lens[0] = sizeof("BGREWRITEAOF") - 1;
@@ -99,7 +99,7 @@ bool CRedisRequest::bgrewriteaof() {
 
 bool CRedisRequest::lastsave() {
     const u32 cnt = 1;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "LASTSAVE";
     lens[0] = sizeof("LASTSAVE") - 1;
@@ -108,5 +108,5 @@ bool CRedisRequest::lastsave() {
 
 
 } //namespace db {
-} // namespace irr
+} // namespace app
 

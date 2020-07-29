@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "IAppLogger.h"
+#include "CLogger.h"
 #include "HRedisTest.h"
 
 
@@ -18,24 +18,24 @@
 #endif  //APP_PLATFORM_WINDOWS
 
 
-namespace irr {
+namespace app {
 
 void AppQuit() {
     //system("PAUSE");
-    irr::c8 key = '\0';
+    s8 key = '\0';
     while('*' != key) {
         printf("@Please input [*] to quit");
         scanf("%c", &key);
     }
 }
 
-}//namespace irr
+}//namespace app
 
 
 int main(int argc, char** argv) {
-    irr::IAppLogger::getInstance().addReceiver(irr::IAppLogger::ELRT_CONSOLE|
-        irr::IAppLogger::ELRT_FILE_HTML);
-    irr::u32 key = 1;
+    app::CLogger::getInstance().addReceiver(app::CLogger::ELRT_CONSOLE|
+        app::CLogger::ELRT_FILE_HTML);
+    app::u32 key = 1;
     while(key) {
         printf("@0 = Exit\n");
         printf("@1 = Redis Pool\n");
@@ -45,13 +45,13 @@ int main(int argc, char** argv) {
         scanf("%u", &key);
         switch(key) {
         case 1:
-            irr::AppTestRedis(1);
+            app::AppTestRedis(1);
             break;
         case 2:
-            irr::AppTestRedisCluster(1);
+            app::AppTestRedisCluster(1);
             break;
         case 3:
-            irr::AppTestRedisClusterZset(1);
+            app::AppTestRedisClusterZset(1);
             break;
         default:break;
         }

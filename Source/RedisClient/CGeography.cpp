@@ -1,37 +1,37 @@
 #include "CRedisRequest.h"
 
-namespace irr {
+namespace app {
 namespace db {
 
-bool CRedisRequest::geoadd(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count) {
+bool CRedisRequest::geoadd(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count) {
     if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLens
         || 0 == count || 0 != count % 3) {
         return false;
     }
     const u32 start = 2;
     const u32 maxcache = 128;
-    c8* tmp_argv[maxcache + start];
+    s8* tmp_argv[maxcache + start];
     u32 tmp_size[maxcache + start];
     const u32 cnt = start + count;
-    c8** argv = count > maxcache ? new c8*[cnt] : tmp_argv;
+    s8** argv = count > maxcache ? new s8*[cnt] : tmp_argv;
     u32* lens = count > maxcache ? new u32[cnt] : tmp_size;
 
     argv[0] = "GEOADD";
     lens[0] = sizeof("GEOADD") - 1;
 
-    argv[1] = const_cast<c8*>(key);
+    argv[1] = const_cast<s8*>(key);
     lens[1] = keyLen;
 
     for (u32 i = 0; i < count; ++i) {
-        argv[i + start] = const_cast<c8*>(val[i]);
+        argv[i + start] = const_cast<s8*>(val[i]);
         lens[i + start] = valLens[i];
     }
 
     bool ret;
     if (isClusterMode()) {
-        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const s8**>(argv), lens);
     } else {
-        ret = launch(cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(cnt, const_cast<const s8**>(argv), lens);
     }
     if (count > maxcache) {
         delete[] argv;
@@ -40,16 +40,16 @@ bool CRedisRequest::geoadd(const c8* key, u32 keyLen, const c8** val, const u32*
     return ret;
 }
 
-bool CRedisRequest::geodist(const c8* key, u32 keyLen,
-    const c8* key1, u32 keyLen1,
-    const c8* key2, u32 keyLen2, u32 unit) {
+bool CRedisRequest::geodist(const s8* key, u32 keyLen,
+    const s8* key1, u32 keyLen1,
+    const s8* key2, u32 keyLen2, u32 unit) {
     if (nullptr == key || 0 == keyLen
         || nullptr == key1 || 0 == keyLen1
         || nullptr == key2 || 0 == keyLen2) {
         return false;
     }
     const u32 cnt = 5;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
 
     argv[0] = "GEODIST";
@@ -82,41 +82,41 @@ bool CRedisRequest::geodist(const c8* key, u32 keyLen,
 
     bool ret;
     if (isClusterMode()) {
-        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const s8**>(argv), lens);
     } else {
-        ret = launch(cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(cnt, const_cast<const s8**>(argv), lens);
     }
     return ret;
 }
 
-bool CRedisRequest::geopos(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count) {
+bool CRedisRequest::geopos(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count) {
     if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLens || 0 == count) {
         return false;
     }
     const u32 start = 2;
     const u32 maxcache = 128;
-    c8* tmp_argv[maxcache + start];
+    s8* tmp_argv[maxcache + start];
     u32 tmp_size[maxcache + start];
     const u32 cnt = start + count;
-    c8** argv = count > maxcache ? new c8*[cnt] : tmp_argv;
+    s8** argv = count > maxcache ? new s8*[cnt] : tmp_argv;
     u32* lens = count > maxcache ? new u32[cnt] : tmp_size;
 
     argv[0] = "GEOPOS";
     lens[0] = sizeof("GEOPOS") - 1;
 
-    argv[1] = const_cast<c8*>(key);
+    argv[1] = const_cast<s8*>(key);
     lens[1] = keyLen;
 
     for (u32 i = 0; i < count; ++i) {
-        argv[i + start] = const_cast<c8*>(val[i]);
+        argv[i + start] = const_cast<s8*>(val[i]);
         lens[i + start] = valLens[i];
     }
 
     bool ret;
     if (isClusterMode()) {
-        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const s8**>(argv), lens);
     } else {
-        ret = launch(cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(cnt, const_cast<const s8**>(argv), lens);
     }
     if (count > maxcache) {
         delete[] argv;
@@ -126,7 +126,7 @@ bool CRedisRequest::geopos(const c8* key, u32 keyLen, const c8** val, const u32*
 }
 
 
-bool CRedisRequest::georadius(const c8* key, u32 keyLen,
+bool CRedisRequest::georadius(const s8* key, u32 keyLen,
     f32 posX, f32 posY, f32 redius, u32 max, u32 unit, u32 flag) {
     if (nullptr == key || 0 == keyLen) {
         return false;
@@ -135,17 +135,17 @@ bool CRedisRequest::georadius(const c8* key, u32 keyLen,
         return false;
     }
     const u32 maxcache = 12;
-    const c8* argv[maxcache];
+    const s8* argv[maxcache];
     u32 lens[maxcache];
 
     argv[0] = "GEORADIUS";
     lens[0] = sizeof("GEORADIUS") - 1;
     argv[1] = key;
     lens[1] = keyLen;
-    c8 longitude[32];
-    c8 latitude[32];
-    c8 rediustr[32];
-    c8 count[16];
+    s8 longitude[32];
+    s8 latitude[32];
+    s8 rediustr[32];
+    s8 count[16];
     argv[2] = longitude;
     lens[2] = snprintf(longitude, sizeof(longitude), "%.16f", posX);
     argv[3] = latitude;
@@ -202,30 +202,30 @@ bool CRedisRequest::georadius(const c8* key, u32 keyLen,
 
     bool ret;
     if (isClusterMode()) {
-        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const s8**>(argv), lens);
     } else {
-        ret = launch(cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(cnt, const_cast<const s8**>(argv), lens);
     }
     return ret;
 }
 
 
-bool CRedisRequest::georadiusbymember(const c8* key, u32 keyLen,
-    const c8* member, u32 memberLen,
+bool CRedisRequest::georadiusbymember(const s8* key, u32 keyLen,
+    const s8* member, u32 memberLen,
     f32 redius, u32 max, u32 unit, u32 flag) {
     if (nullptr == key || 0 == keyLen || nullptr == member || 0 == memberLen) {
         return false;
     }
     const u32 maxcache = 11;
-    const c8* argv[maxcache];
+    const s8* argv[maxcache];
     u32 lens[maxcache];
 
     argv[0] = "GEORADIUSBYMEMBER";
     lens[0] = sizeof("GEORADIUSBYMEMBER") - 1;
     argv[1] = key;
     lens[1] = keyLen;
-    c8 rediustr[32];
-    c8 count[16];
+    s8 rediustr[32];
+    s8 count[16];
     argv[2] = member;
     lens[2] = memberLen;
     argv[3] = rediustr;
@@ -280,42 +280,42 @@ bool CRedisRequest::georadiusbymember(const c8* key, u32 keyLen,
 
     bool ret;
     if (isClusterMode()) {
-        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const s8**>(argv), lens);
     } else {
-        ret = launch(cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(cnt, const_cast<const s8**>(argv), lens);
     }
     return ret;
 }
 
 
-bool CRedisRequest::geohash(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count) {
+bool CRedisRequest::geohash(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count) {
     if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLens || 0 == count) {
         return false;
     }
     const u32 start = 2;
     const u32 maxcache = 128;
-    c8* tmp_argv[maxcache + start];
+    s8* tmp_argv[maxcache + start];
     u32 tmp_size[maxcache + start];
     const u32 cnt = start + count;
-    c8** argv = count > maxcache ? new c8*[cnt] : tmp_argv;
+    s8** argv = count > maxcache ? new s8*[cnt] : tmp_argv;
     u32* lens = count > maxcache ? new u32[cnt] : tmp_size;
 
     argv[0] = "GEOHASH";
     lens[0] = sizeof("GEOHASH") - 1;
 
-    argv[1] = const_cast<c8*>(key);
+    argv[1] = const_cast<s8*>(key);
     lens[1] = keyLen;
 
     for (u32 i = 0; i < count; ++i) {
-        argv[i + start] = const_cast<c8*>(val[i]);
+        argv[i + start] = const_cast<s8*>(val[i]);
         lens[i + start] = valLens[i];
     }
 
     bool ret;
     if (isClusterMode()) {
-        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const s8**>(argv), lens);
     } else {
-        ret = launch(cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(cnt, const_cast<const s8**>(argv), lens);
     }
     if (count > maxcache) {
         delete[] argv;
@@ -325,4 +325,4 @@ bool CRedisRequest::geohash(const c8* key, u32 keyLen, const c8** val, const u32
 }
 
 } //namespace db {
-} // namespace irr
+} // namespace app

@@ -4,7 +4,7 @@
 #include "CNetService.h"
 #include "CQueue2Way.h"
 
-namespace irr {
+namespace app {
 class CMemoryHub;
 
 namespace db {
@@ -25,7 +25,7 @@ public:
 
     virtual ~CRedisClientPool();
 
-    const c8* getPassword()const {
+    const s8* getPassword()const {
         return mPassword;
     }
 
@@ -63,7 +63,7 @@ public:
     void onConnect(CRedisClient* it, s32 status);
 
     void open(const net::CNetAddress& serverIP, s32 maxTCP,
-        const c8* passowrd, s32 dbID = 0);
+        const s8* passowrd, s32 dbID = 0);
 
     void close();
 
@@ -71,15 +71,24 @@ public:
         return mHub;
     }
 
+    void setMaxRetry(u32 it) {
+        mMaxRetry = it;
+    }
+
+    u32 getMaxRetry() const {
+        return mMaxRetry;
+    }
+
 protected:
     CRedisClient* createSession(void);
     void deleteSession(CRedisClient* it);
-    void setPassword(const c8* pass);
+    void setPassword(const s8* pass);
 
 private:
     bool mRunning;
-    c8 mPassword[64];
+    s8 mPassword[64];
     s32 mDatabaseID;
+    u32 mMaxRetry;
     net::CNetAddress mRemoterAddr;
     net::CNetServiceTCP* mServer;
     s32 mMaxTCP;
@@ -90,5 +99,5 @@ private:
 };
 
 } //namespace db {
-} // namespace irr
+} // namespace app
 

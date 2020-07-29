@@ -5,7 +5,7 @@
 #include "CRedisClientPool.h"
 #include "CRedisClientCluster.h"
 
-namespace irr {
+namespace app {
 namespace db {
 
 class CRedisCommand {
@@ -84,13 +84,23 @@ public:
         return mUserPointer;
     }
 
-    //redirect: MOVED, ASK
-    bool relaunch(u32 slot, const c8* ip);
+    /**
+    * @brief redirect: MOVED, ASK, fix slot if MOVED.
+    *        MOVED 866 172.21.16.4:6379
+    *        ASK 866 172.21.16.4:6379
+    *
+    * @param itype 1=Error, 2=ASK, 4=MOVED
+    */
+    bool relaunch(u32 slot, const s8* ip, s32 itype);
 
-    static u16 hashSlot(const c8* key, u64 len);
+    u16 hashSlot(const s8* key, u64 len);
 
-    static u16 hashSlot(const c8* key) {
+    u16 hashSlot(const s8* key) {
         return hashSlot(key, strlen(key));
+    }
+
+    u16 getSlot()const {
+        return mSlot;
     }
 
 protected:
@@ -99,13 +109,14 @@ protected:
     AppRedisCaller mCallback;
     CRedisClient* mLink;
     CRedisClientCluster* mCluster;
-    c8* mRequestBuf;
+    s8* mRequestBuf;
     u32 mRequestSize;
-    u32 mRequestCount; //redirect times
+    u32 mRequestCount; //relaunch times
+    u16 mSlot;
 
-    bool launch(u32 argc, const c8** argv, const u32* lens);
+    bool launch(u32 argc, const s8** argv, const u32* lens);
 
-    bool launch(u32 slot, u32 argc, const c8** argv, const u32* lens);
+    bool launch(u32 slot, u32 argc, const s8** argv, const u32* lens);
 
     bool isClusterMode()const {
         return nullptr != mCluster;
@@ -121,5 +132,5 @@ private:
 
 
 } //namespace db {
-} // namespace irr
+} // namespace app
 

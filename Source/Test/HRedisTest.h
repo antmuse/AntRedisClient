@@ -1,7 +1,7 @@
 #pragma once
 #include "HConfig.h"
 
-namespace irr {
+namespace app {
 
 void AppTestRedis(int max_threads);
 

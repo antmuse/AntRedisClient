@@ -1,50 +1,50 @@
 #ifndef APP_IREFERENCECOUNTED_H
 #define APP_IREFERENCECOUNTED_H
 
-#include "irrTypes.h"
+#include "HConfig.h"
 
-namespace irr {
+namespace app {
 
-	class IReferenceCounted {
-	public:
-		/// Constructor.
-		IReferenceCounted() : ReferenceCounter(1) {
-		}
+class IReferenceCounted {
+public:
+    /// Constructor.
+    IReferenceCounted() : mCounter(1) {
+    }
 
-		/// Destructor.
-		virtual ~IReferenceCounted() {
-		}
+    /// Destructor.
+    virtual ~IReferenceCounted() {
+    }
 
-		void grab() const { 
-			++ReferenceCounter;
-		}
+    void grab() const {
+        ++mCounter;
+    }
 
-		bool drop() const {
-			// someone is doing bad reference counting.
-			_IRR_DEBUG_BREAK_IF(ReferenceCounter <= 0)
+    bool drop() const {
+        // someone is doing bad reference counting.
+        APP_ASSERT(mCounter > 0);
 
-				--ReferenceCounter;
-			if (!ReferenceCounter) {
-				delete this;
-				return true;
-			}
+        --mCounter;
+        if (!mCounter) {
+            delete this;
+            return true;
+        }
 
-			return false;
-		}
+        return false;
+    }
 
-		/**
-		* @brief Get the reference count.
-		* @return Current value of the reference counter. 
-		*/
-		s32 getReferenceCount() const {
-			return ReferenceCounter;
-		}
+    /**
+    * @brief Get the reference count.
+    * @return Current value of the reference counter.
+    */
+    s32 getReferenceCount() const {
+        return mCounter;
+    }
 
-	private:
-		/// The reference counter. Mutable to do reference counting on const objects.
-		mutable s32 ReferenceCounter;
-	};
+private:
+    /// The reference counter. Mutable to do reference counting on const objects.
+    mutable s32 mCounter;
+};
 
-} // end namespace irr
+} // end namespace app
 
 #endif //APP_IREFERENCECOUNTED_H

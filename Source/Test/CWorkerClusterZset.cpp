@@ -1,6 +1,6 @@
 #include "CWorkerClusterZset.h"
 
-namespace irr {
+namespace app {
 
 
 void AppRedisCallerZset(db::CRedisRequest* it, db::CRedisResponse* res) {
@@ -31,11 +31,11 @@ void CWorkerClusterZset::callback(db::CRedisRequest* it, db::CRedisResponse* res
 
 void CWorkerClusterZset::run() {
     //return;
-    const c8* keyname = "timed";
+    const s8* keyname = "timed";
     const u32 keysz = strlen(keyname);
-    c8 val[2048];
-    c8 score[16];
-    const c8* vals[2] = { score, val };
+    s8 val[2048];
+    s8 score[16];
+    const s8* vals[2] = { score, val };
     u32 valsz[2];
     for(s32 i = 0; mRunning && i < 100; i++) {
         valsz[0] = snprintf(score, sizeof(score), "%d", i + 1);

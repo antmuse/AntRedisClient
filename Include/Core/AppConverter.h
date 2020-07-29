@@ -1,19 +1,15 @@
-#ifndef __FAST_ATOF_H_INCLUDED__
-#define __FAST_ATOF_H_INCLUDED__
+#ifndef APP_CONVERTER_H
+#define APP_CONVERTER_H
 
-#include "irrMath.h"
-#include "irrString.h"
+#include "HConfig.h"
 
-namespace irr {
+namespace app {
 namespace core {
-//! Selection of characters which count as decimal point in fast_atof
-// TODO: This should probably also be used in irr::core::string, but the float-to-string code
-//		used there has to be rewritten first.
-extern irr::core::stringc LOCALE_DECIMAL_POINTS;
 
-#define IRR_ATOF_TABLE_SIZE 17
-// we write [IRR_ATOF_TABLE_SIZE] here instead of [] to work around a swig bug
-const float fast_atof_table[17] = {
+#define APP_DECIMAL_POINTS '.'
+
+#define APP_ATOF_TABLE_SIZE 17
+const f32 G_FAST_ATOF_TABLE[17] = {
     0.f,
     0.1f,
     0.01f,
@@ -41,10 +37,11 @@ first character not used in the calculation.
 \return The unsigned integer value of the digits. If the string specifies
 too many digits to encode in an u32 then INT_MAX will be returned.
 */
-inline u32 strtoul10(const char* in, const char** out = 0) {
+template <typename T>
+inline u32 App10StrToU32(const T* in, const T** out = nullptr) {
     if(!in) {
         if(out)
-            * out = in;
+            *out = in;
         return 0;
     }
 
@@ -61,9 +58,9 @@ inline u32 strtoul10(const char* in, const char** out = 0) {
         ++in;
     }
 
-    if(out)
-        * out = in;
-
+    if(out) {
+        *out = in;
+    }
     return unsignedValue;
 }
 
@@ -77,10 +74,11 @@ first character not used in the calculation.
 too many digits to encode in an s32 then +INT_MAX or -INT_MAX will be
 returned.
 */
-inline s32 strtol10(const char* in, const char** out = 0) {
+template <typename T>
+inline s32 App10StrToS32(const T* in, const T** out = nullptr) {
     if(!in) {
         if(out)
-            * out = in;
+            *out = in;
         return 0;
     }
 
@@ -88,7 +86,7 @@ inline s32 strtol10(const char* in, const char** out = 0) {
     if(negative || ('+' == *in))
         ++in;
 
-    const u32 unsignedValue = strtoul10(in, out);
+    const u32 unsignedValue = App10StrToU32(in, out);
     if(unsignedValue > (u32)INT_MAX) {
         if(negative)
             return (s32)INT_MIN;
@@ -105,10 +103,11 @@ inline s32 strtol10(const char* in, const char** out = 0) {
 //! Convert a hex-encoded character to an unsigned integer.
 /** \param[in] in The digit to convert. Only digits 0 to 9 and chars A-F,a-f
 will be considered.
-\return The unsigned integer value of the digit. 0xffffffff if the input is
+\return The unsigned integer value of the digit. 0 if the input is
 not hex
 */
-inline u32 ctoul16(char in) {
+template <typename T>
+inline u32 App16CharToU32(T in) {
     if(in >= '0' && in <= '9')
         return in - '0';
     else if(in >= 'a' && in <= 'f')
@@ -116,7 +115,7 @@ inline u32 ctoul16(char in) {
     else if(in >= 'A' && in <= 'F')
         return 10u + in - 'A';
     else
-        return 0xffffffff;
+        return 0;
 }
 
 //! Convert a simple string of base 16 digits into an unsigned 32 bit integer.
@@ -128,10 +127,11 @@ first character not used in the calculation.
 \return The unsigned integer value of the digits. If the string specifies
 too many digits to encode in an u32 then INT_MAX will be returned.
 */
-inline u32 strtoul16(const char* in, const char** out = 0) {
+template <typename T>
+inline u32 App16StrToU32(const T* in, const T** out = nullptr) {
     if(!in) {
         if(out)
-            * out = in;
+            *out = in;
         return 0;
     }
 
@@ -157,7 +157,7 @@ inline u32 strtoul16(const char* in, const char** out = 0) {
     }
 
     if(out)
-        * out = in;
+        *out = in;
 
     return unsignedValue;
 }
@@ -171,10 +171,11 @@ first character not used in the calculation.
 \return The unsigned integer value of the digits. If the string specifies
 too many digits to encode in an u32 then INT_MAX will be returned.
 */
-inline u32 strtoul8(const char* in, const char** out = 0) {
+template <typename T>
+inline u32 App8StrToU32(const T* in, const T** out = nullptr) {
     if(!in) {
         if(out)
-            * out = in;
+            *out = in;
         return 0;
     }
 
@@ -196,7 +197,7 @@ inline u32 strtoul8(const char* in, const char** out = 0) {
     }
 
     if(out)
-        * out = in;
+        *out = in;
 
     return unsignedValue;
 }
@@ -210,15 +211,18 @@ first character not used in the calculation.
 \return The unsigned integer value of the digits. If the string specifies
 too many digits to encode in an u32 then INT_MAX will be returned.
 */
-inline u32 strtoul_prefix(const char* in, const char** out = 0) {
+template <typename T>
+inline u32 AppPrefixStrToU32(const T* in, const T** out = nullptr) {
     if(!in) {
-        if(out)
-            * out = in;
+        if(out) {
+            *out = in;
+        }
         return 0;
     }
-    if('0' == in[0])
-        return ('x' == in[1] ? strtoul16(in + 2, out) : strtoul8(in + 1, out));
-    return strtoul10(in, out);
+    if('0' == in[0]) {
+        return (('x' == in[1] || 'X' == in[1]) ? App16StrToU32(in + 2, out) : App8StrToU32(in + 1, out));
+    }
+    return App10StrToU32(in, out);
 }
 
 //! Converts a sequence of digits into a whole positive floating point value.
@@ -230,10 +234,11 @@ character.
 \return The whole positive floating point representation of the digit
 sequence.
 */
-inline f32 strtof10(const char* in, const char** out = 0) {
+template <typename T>
+inline f32 AppStrToF32P(const T* in, const T** out = nullptr) {
     if(!in) {
         if(out)
-            * out = in;
+            *out = in;
         return 0.f;
     }
 
@@ -264,40 +269,42 @@ inline f32 strtof10(const char* in, const char** out = 0) {
     }
 
     if(out)
-        * out = in;
+        *out = in;
 
     return floatValue;
 }
 
-//! Provides a fast function for converting a string into a float.
+//! Provides a fast function for converting a string into a f32.
 /** This is not guaranteed to be as accurate as atof(), but is
 approximately 6 to 8 times as fast.
 \param[in] in The string to convert.
-\param[out] result The resultant float will be written here.
-\return Pointer to the first character in the string that wasn't used
-to create the float value.
+\param[out] out Optional pointer to the first character in the string that
+wasn't used to create the f32 value.
+\return Float value parsed from the input string
 */
-inline const char* fast_atof_move(const char* in, f32& result) {
+template <typename T>
+inline const f32 AppStrToF32(const T* in, const T** out = nullptr) {
     // Please run the regression test when making any modifications to this function.
-
-    result = 0.f;
-    if(!in)
-        return 0;
+    if(!in) {
+        if(out)
+            *out = in;
+        return 0.f;
+    }
 
     const bool negative = ('-' == *in);
     if(negative || ('+' == *in))
         ++in;
 
-    f32 value = strtof10(in, &in);
+    f32 value = AppStrToF32P(in, &in);
 
-    if(LOCALE_DECIMAL_POINTS.findFirst(*in) >= 0) {
+    if(APP_DECIMAL_POINTS == (*in)) {
         const char* afterDecimal = ++in;
-        f32 decimal = strtof10(in, &afterDecimal);
+        f32 decimal = AppStrToF32P(in, &afterDecimal);
         size_t numDecimals = afterDecimal - in;
-        if(numDecimals < IRR_ATOF_TABLE_SIZE) {
-            value += decimal * fast_atof_table[numDecimals];
+        if(numDecimals < APP_ATOF_TABLE_SIZE) {
+            value += decimal * G_FAST_ATOF_TABLE[numDecimals];
         } else {
-            value += decimal * (f32)pow(10.f, -(float)numDecimals);
+            value += decimal * (f32)pow(10.f, -(f32)numDecimals);
         }
         in = afterDecimal;
     }
@@ -305,33 +312,23 @@ inline const char* fast_atof_move(const char* in, f32& result) {
     if('e' == *in || 'E' == *in) {
         ++in;
         // Assume that the exponent is a whole number.
-        // strtol10() will deal with both + and - signs,
+        // App10StrToS32() will deal with both + and - signs,
         // but calculate as f32 to prevent overflow at FLT_MAX
-        // Using pow with float cast instead of powf as otherwise accuracy decreases.
-        value *= (f32)pow(10.f, (f32)strtol10(in, &in));
+        // Using pow with f32 cast instead of powf as otherwise accuracy decreases.
+        value *= (f32)pow(10.f, (f32)App10StrToS32(in, &in));
     }
 
-    result = negative ? -value : value;
-    return in;
+    if(out) {
+        *out = in;
+    }
+
+    return negative ? -value : value;
 }
 
-//! Convert a string to a floating point number
-/** \param floatAsString The string to convert.
-\param out Optional pointer to the first character in the string that
-wasn't used to create the float value.
-\result Float value parsed from the input string
-*/
-inline float fast_atof(const char* floatAsString, const char** out = 0) {
-    float ret;
-    if(out)
-        * out = fast_atof_move(floatAsString, ret);
-    else
-        fast_atof_move(floatAsString, ret);
-    return ret;
-}
+
 
 } // end namespace core
-} // end namespace irr
+} // end namespace app
 
-#endif
+#endif //APP_CONVERTER_H
 

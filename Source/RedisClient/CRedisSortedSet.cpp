@@ -1,36 +1,36 @@
 #include "CRedisRequest.h"
 
-namespace irr {
+namespace app {
 namespace db {
 
-bool CRedisRequest::zadd(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count) {
+bool CRedisRequest::zadd(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count) {
     if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLens || 0 == count) {
         return false;
     }
     const u32 start = 2;
     const u32 maxcache = 128;
-    c8* tmp_argv[maxcache + start];
+    s8* tmp_argv[maxcache + start];
     u32 tmp_size[maxcache + start];
     const u32 cnt = start + count;
-    c8** argv = count > maxcache ? new c8*[cnt] : tmp_argv;
+    s8** argv = count > maxcache ? new s8*[cnt] : tmp_argv;
     u32* lens = count > maxcache ? new u32[cnt] : tmp_size;
 
     argv[0] = "ZADD";
     lens[0] = sizeof("ZADD") - 1;
 
-    argv[1] = const_cast<c8*>(key);
+    argv[1] = const_cast<s8*>(key);
     lens[1] = keyLen;
 
     for (u32 i = 0; i < count; ++i) {
-        argv[i + start] = const_cast<c8*>(val[i]);
+        argv[i + start] = const_cast<s8*>(val[i]);
         lens[i + start] = valLens[i];
     }
 
     bool ret;
     if (isClusterMode()) {
-        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const s8**>(argv), lens);
     } else {
-        ret = launch(cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(cnt, const_cast<const s8**>(argv), lens);
     }
     if (count > maxcache) {
         delete[] argv;
@@ -39,34 +39,34 @@ bool CRedisRequest::zadd(const c8* key, u32 keyLen, const c8** val, const u32* v
     return ret;
 }
 
-bool CRedisRequest::zrem(const c8* key, u32 keyLen, const c8** val, const u32* valLens, u32 count) {
+bool CRedisRequest::zrem(const s8* key, u32 keyLen, const s8** val, const u32* valLens, u32 count) {
     if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLens || 0 == count) {
         return false;
     }
     const u32 start = 2;
     const u32 maxcache = 128;
-    c8* tmp_argv[maxcache + start];
+    s8* tmp_argv[maxcache + start];
     u32 tmp_size[maxcache + start];
     const u32 cnt = start + count;
-    c8** argv = count > maxcache ? new c8*[cnt] : tmp_argv;
+    s8** argv = count > maxcache ? new s8*[cnt] : tmp_argv;
     u32* lens = count > maxcache ? new u32[cnt] : tmp_size;
 
     argv[0] = "ZREM";
     lens[0] = sizeof("ZREM") - 1;
 
-    argv[1] = const_cast<c8*>(key);
+    argv[1] = const_cast<s8*>(key);
     lens[1] = keyLen;
 
     for (u32 i = 0; i < count; ++i) {
-        argv[i + start] = const_cast<c8*>(val[i]);
+        argv[i + start] = const_cast<s8*>(val[i]);
         lens[i + start] = valLens[i];
     }
 
     bool ret;
     if (isClusterMode()) {
-        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(hashSlot(key, keyLen), cnt, const_cast<const s8**>(argv), lens);
     } else {
-        ret = launch(cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(cnt, const_cast<const s8**>(argv), lens);
     }
     if (count > maxcache) {
         delete[] argv;
@@ -75,12 +75,12 @@ bool CRedisRequest::zrem(const c8* key, u32 keyLen, const c8** val, const u32* v
     return ret;
 }
 
-bool CRedisRequest::zscore(const c8* key, u32 keyLen, const c8* val, const u32 valLen) {
+bool CRedisRequest::zscore(const s8* key, u32 keyLen, const s8* val, const u32 valLen) {
     if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLen) {
         return false;
     }
     const u32 cnt = 3;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "ZSCORE";
     lens[0] = sizeof("ZSCORE") - 1;
@@ -97,12 +97,12 @@ bool CRedisRequest::zscore(const c8* key, u32 keyLen, const c8* val, const u32 v
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zincrby(const c8* key, u32 keyLen, const c8* val, const u32 valLen, s32 value) {
+bool CRedisRequest::zincrby(const s8* key, u32 keyLen, const s8* val, const u32 valLen, s32 value) {
     if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLen) {
         return false;
     }
     const u32 cnt = 4;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "ZINCRBY";
     lens[0] = sizeof("ZINCRBY") - 1;
@@ -110,7 +110,7 @@ bool CRedisRequest::zincrby(const c8* key, u32 keyLen, const c8* val, const u32 
     argv[1] = key;
     lens[1] = keyLen;
 
-    c8 buf[16];
+    s8 buf[16];
     snprintf(buf, sizeof(buf), "%d", value);
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
@@ -124,12 +124,12 @@ bool CRedisRequest::zincrby(const c8* key, u32 keyLen, const c8* val, const u32 
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zrank(const c8* key, u32 keyLen, const c8* val, const u32 valLen) {
+bool CRedisRequest::zrank(const s8* key, u32 keyLen, const s8* val, const u32 valLen) {
     if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLen) {
         return false;
     }
     const u32 cnt = 3;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "ZRANK";
     lens[0] = sizeof("ZRANK") - 1;
@@ -146,12 +146,12 @@ bool CRedisRequest::zrank(const c8* key, u32 keyLen, const c8* val, const u32 va
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zrevrank(const c8* key, u32 keyLen, const c8* val, const u32 valLen) {
+bool CRedisRequest::zrevrank(const s8* key, u32 keyLen, const s8* val, const u32 valLen) {
     if (nullptr == key || 0 == keyLen || nullptr == val || 0 == valLen) {
         return false;
     }
     const u32 cnt = 3;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "ZREVRANK";
     lens[0] = sizeof("ZREVRANK") - 1;
@@ -168,12 +168,12 @@ bool CRedisRequest::zrevrank(const c8* key, u32 keyLen, const c8* val, const u32
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zcard(const c8* key, u32 keyLen) {
+bool CRedisRequest::zcard(const s8* key, u32 keyLen) {
     if (nullptr == key || 0 == keyLen) {
         return false;
     }
     const u32 cnt = 2;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "ZCARD";
     lens[0] = sizeof("ZCARD") - 1;
@@ -187,12 +187,12 @@ bool CRedisRequest::zcard(const c8* key, u32 keyLen) {
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zcount(const c8* key, u32 keyLen, s32 min, s32 max) {
+bool CRedisRequest::zcount(const s8* key, u32 keyLen, s32 min, s32 max) {
     if (nullptr == key || 0 == keyLen) {
         return false;
     }
     const u32 cnt = 4;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "ZCOUNT";
     lens[0] = sizeof("ZCOUNT") - 1;
@@ -200,12 +200,12 @@ bool CRedisRequest::zcount(const c8* key, u32 keyLen, s32 min, s32 max) {
     argv[1] = key;
     lens[1] = keyLen;
 
-    c8 buf[16];
+    s8 buf[16];
     snprintf(buf, sizeof(buf), "%d", min);
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
 
-    c8 buf2[16];
+    s8 buf2[16];
     snprintf(buf2, sizeof(buf2), "%d", max);
     argv[3] = buf2;
     lens[3] = (u32)::strlen(buf2);
@@ -216,12 +216,12 @@ bool CRedisRequest::zcount(const c8* key, u32 keyLen, s32 min, s32 max) {
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zrange(const c8* key, u32 keyLen, s32 start, s32 stop, bool withScore) {
+bool CRedisRequest::zrange(const s8* key, u32 keyLen, s32 start, s32 stop, bool withScore) {
     if (nullptr == key || 0 == keyLen) {
         return false;
     }
     const u32 max = 5;
-    const c8* argv[max];
+    const s8* argv[max];
     u32 lens[max];
     argv[0] = "ZRANGE";
     lens[0] = sizeof("ZRANGE") - 1;
@@ -229,12 +229,12 @@ bool CRedisRequest::zrange(const c8* key, u32 keyLen, s32 start, s32 stop, bool 
     argv[1] = key;
     lens[1] = keyLen;
 
-    c8 buf[16];
+    s8 buf[16];
     snprintf(buf, sizeof(buf), "%d", start);
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
 
-    c8 buf2[16];
+    s8 buf2[16];
     snprintf(buf2, sizeof(buf2), "%d", stop);
     argv[3] = buf2;
     lens[3] = (u32)::strlen(buf2);
@@ -252,12 +252,12 @@ bool CRedisRequest::zrange(const c8* key, u32 keyLen, s32 start, s32 stop, bool 
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zremrangebyrank(const c8* key, u32 keyLen, s32 start, s32 stop) {
+bool CRedisRequest::zremrangebyrank(const s8* key, u32 keyLen, s32 start, s32 stop) {
     if (nullptr == key || 0 == keyLen) {
         return false;
     }
     const u32 cnt = 4;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "ZREMRANGEBYRANK";
     lens[0] = sizeof("ZREMRANGEBYRANK") - 1;
@@ -265,12 +265,12 @@ bool CRedisRequest::zremrangebyrank(const c8* key, u32 keyLen, s32 start, s32 st
     argv[1] = key;
     lens[1] = keyLen;
 
-    c8 buf[16];
+    s8 buf[16];
     snprintf(buf, sizeof(buf), "%d", start);
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
 
-    c8 buf2[16];
+    s8 buf2[16];
     snprintf(buf2, sizeof(buf2), "%d", stop);
     argv[3] = buf2;
     lens[3] = (u32)::strlen(buf2);
@@ -282,12 +282,12 @@ bool CRedisRequest::zremrangebyrank(const c8* key, u32 keyLen, s32 start, s32 st
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zrevrange(const c8* key, u32 keyLen, s32 start, s32 stop, bool withScore) {
+bool CRedisRequest::zrevrange(const s8* key, u32 keyLen, s32 start, s32 stop, bool withScore) {
     if (nullptr == key || 0 == keyLen) {
         return false;
     }
     const u32 max = 5;
-    const c8* argv[max];
+    const s8* argv[max];
     u32 lens[max];
     argv[0] = "ZREVRANGE";
     lens[0] = sizeof("ZREVRANGE") - 1;
@@ -295,12 +295,12 @@ bool CRedisRequest::zrevrange(const c8* key, u32 keyLen, s32 start, s32 stop, bo
     argv[1] = key;
     lens[1] = keyLen;
 
-    c8 buf[16];
+    s8 buf[16];
     snprintf(buf, sizeof(buf), "%d", start);
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
 
-    c8 buf2[16];
+    s8 buf2[16];
     snprintf(buf2, sizeof(buf2), "%d", stop);
     argv[3] = buf2;
     lens[3] = (u32)::strlen(buf2);
@@ -318,12 +318,12 @@ bool CRedisRequest::zrevrange(const c8* key, u32 keyLen, s32 start, s32 stop, bo
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iMax, u32 flag, bool withScore) {
+bool CRedisRequest::zrangebyscore(const s8* key, u32 keyLen, f32 iMin, f32 iMax, u32 flag, bool withScore) {
     if (nullptr == key || 0 == keyLen) {
         return false;
     }
     const u32 max = 5;
-    const c8* argv[max];
+    const s8* argv[max];
     u32 lens[max];
     argv[0] = "ZRANGEBYSCORE";
     lens[0] = sizeof("ZRANGEBYSCORE") - 1;
@@ -331,7 +331,7 @@ bool CRedisRequest::zrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iMax,
     argv[1] = key;
     lens[1] = keyLen;
 
-    c8 buf[16];
+    s8 buf[16];
     if (0 != (flag & 2U)) {
         snprintf(buf, sizeof(buf), "-inf");
     } else if (0 != (flag & 1U)) {
@@ -342,7 +342,7 @@ bool CRedisRequest::zrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iMax,
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
 
-    c8 buf2[16];
+    s8 buf2[16];
     if (0 != (flag & 8U)) {
         snprintf(buf2, sizeof(buf2), "+inf");
     } else if (0 != (flag & 4U)) {
@@ -366,12 +366,12 @@ bool CRedisRequest::zrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iMax,
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zrevrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iMax, u32 flag, bool withScore) {
+bool CRedisRequest::zrevrangebyscore(const s8* key, u32 keyLen, f32 iMin, f32 iMax, u32 flag, bool withScore) {
     if (nullptr == key || 0 == keyLen) {
         return false;
     }
     const u32 max = 5;
-    const c8* argv[max];
+    const s8* argv[max];
     u32 lens[max];
     argv[0] = "ZREVRANGEBYSCORE";
     lens[0] = sizeof("ZREVRANGEBYSCORE") - 1;
@@ -379,7 +379,7 @@ bool CRedisRequest::zrevrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iM
     argv[1] = key;
     lens[1] = keyLen;
 
-    c8 buf[16];
+    s8 buf[16];
     if (0 != (flag & 2U)) {
         snprintf(buf, sizeof(buf), "-inf");
     } else if (0 != (flag & 1U)) {
@@ -390,7 +390,7 @@ bool CRedisRequest::zrevrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iM
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
 
-    c8 buf2[16];
+    s8 buf2[16];
     if (0 != (flag & 8U)) {
         snprintf(buf2, sizeof(buf2), "+inf");
     } else if (0 != (flag & 4U)) {
@@ -414,12 +414,12 @@ bool CRedisRequest::zrevrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iM
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zremrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iMax, u32 flag) {
+bool CRedisRequest::zremrangebyscore(const s8* key, u32 keyLen, f32 iMin, f32 iMax, u32 flag) {
     if (nullptr == key || 0 == keyLen) {
         return false;
     }
     const u32 cnt = 4;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
     argv[0] = "ZRANGEBYSCORE";
     lens[0] = sizeof("ZRANGEBYSCORE") - 1;
@@ -427,7 +427,7 @@ bool CRedisRequest::zremrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iM
     argv[1] = key;
     lens[1] = keyLen;
 
-    c8 buf[16];
+    s8 buf[16];
     if (0 != (flag & 2U)) {
         snprintf(buf, sizeof(buf), "-inf");
     } else if (0 != (flag & 1U)) {
@@ -438,7 +438,7 @@ bool CRedisRequest::zremrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iM
     argv[2] = buf;
     lens[2] = (u32)::strlen(buf);
 
-    c8 buf2[16];
+    s8 buf2[16];
     if (0 != (flag & 8U)) {
         snprintf(buf2, sizeof(buf2), "+inf");
     } else if (0 != (flag & 4U)) {
@@ -455,15 +455,15 @@ bool CRedisRequest::zremrangebyscore(const c8* key, u32 keyLen, f32 iMin, f32 iM
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zrangebylex(const c8* key, u32 keyLen,
-    const c8* min, u32 minLen, const c8* max, u32 maxLen) {
+bool CRedisRequest::zrangebylex(const s8* key, u32 keyLen,
+    const s8* min, u32 minLen, const s8* max, u32 maxLen) {
     if (nullptr == key || 0 == keyLen
         || nullptr == min || 0 == minLen
         || nullptr == max || 0 == maxLen) {
         return false;
     }
     const u32 cnt = 4;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
 
     argv[0] = "ZRANGEBYLEX";
@@ -484,15 +484,15 @@ bool CRedisRequest::zrangebylex(const c8* key, u32 keyLen,
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zlexcount(const c8* key, u32 keyLen,
-    const c8* min, u32 minLen, const c8* max, u32 maxLen) {
+bool CRedisRequest::zlexcount(const s8* key, u32 keyLen,
+    const s8* min, u32 minLen, const s8* max, u32 maxLen) {
     if (nullptr == key || 0 == keyLen
         || nullptr == min || 0 == minLen
         || nullptr == max || 0 == maxLen) {
         return false;
     }
     const u32 cnt = 4;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
 
     argv[0] = "ZLEXCOUNT";
@@ -513,15 +513,15 @@ bool CRedisRequest::zlexcount(const c8* key, u32 keyLen,
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zremrangebylex(const c8* key, u32 keyLen,
-    const c8* min, u32 minLen, const c8* max, u32 maxLen) {
+bool CRedisRequest::zremrangebylex(const s8* key, u32 keyLen,
+    const s8* min, u32 minLen, const s8* max, u32 maxLen) {
     if (nullptr == key || 0 == keyLen
         || nullptr == min || 0 == minLen
         || nullptr == max || 0 == maxLen) {
         return false;
     }
     const u32 cnt = 4;
-    const c8* argv[cnt];
+    const s8* argv[cnt];
     u32 lens[cnt];
 
     argv[0] = "ZREMRANGEBYLEX";
@@ -542,12 +542,12 @@ bool CRedisRequest::zremrangebylex(const c8* key, u32 keyLen,
     return launch(cnt, argv, lens);
 }
 
-bool CRedisRequest::zscan(const c8* key, u32 keyLen, u32 offset, const c8* pattern, u32 patLen, u32 count) {
+bool CRedisRequest::zscan(const s8* key, u32 keyLen, u32 offset, const s8* pattern, u32 patLen, u32 count) {
     if (nullptr == key || 0 == keyLen) {
         return false;
     }
     const u32 max = 7;
-    const c8* argv[max];
+    const s8* argv[max];
     u32 lens[max];
 
     argv[0] = "ZSCAN";
@@ -556,7 +556,7 @@ bool CRedisRequest::zscan(const c8* key, u32 keyLen, u32 offset, const c8* patte
     argv[1] = key;
     lens[1] = keyLen;
 
-    c8 buf[16];
+    s8 buf[16];
     snprintf(buf, sizeof(buf), "%u", offset);
     argv[2] = buf;
     lens[2] = (u32)strlen(buf);
@@ -577,7 +577,7 @@ bool CRedisRequest::zscan(const c8* key, u32 keyLen, u32 offset, const c8* patte
         argv[cnt] = "COUNT";
         lens[cnt++] = sizeof("COUNT") - 1;
 
-        c8 buf2[16];
+        s8 buf2[16];
         snprintf(buf2, sizeof(buf2), "%u", count);
         argv[cnt] = buf2;
         lens[cnt++] = (u32)strlen(buf2);
@@ -590,9 +590,9 @@ bool CRedisRequest::zscan(const c8* key, u32 keyLen, u32 offset, const c8* patte
 }
 
 
-bool CRedisRequest::zunionstore(const c8* destkey, u32 destkeyLen,
-    const c8** keys, const u32* keyLens,
-    const c8** weight, const u32* weightLens,
+bool CRedisRequest::zunionstore(const s8* destkey, u32 destkeyLen,
+    const s8** keys, const u32* keyLens,
+    const s8** weight, const u32* weightLens,
     u32 count, s32 aggregate) {
     if (nullptr == destkey || 0 == destkeyLen || 0 == count
         || nullptr == keys || nullptr == keyLens
@@ -602,25 +602,25 @@ bool CRedisRequest::zunionstore(const c8* destkey, u32 destkeyLen,
 
     const u32 start = 2;
     const u32 maxcache = 128;
-    c8* tmp_argv[maxcache];
+    s8* tmp_argv[maxcache];
     u32 tmp_size[maxcache];
     const u32 cnt = start + 2 * count + 1;
-    c8** argv = cnt > maxcache ? new c8*[cnt] : tmp_argv;
+    s8** argv = cnt > maxcache ? new s8*[cnt] : tmp_argv;
     u32* lens = cnt > maxcache ? new u32[cnt] : tmp_size;
 
     argv[0] = "ZUNIONSTORE";
     lens[0] = sizeof("ZUNIONSTORE") - 1;
 
-    c8 num[16];
+    s8 num[16];
     argv[1] = num;
     lens[1] = snprintf(num, sizeof(num), "%u", count);
 
     for (u32 i = 0; i < count; ++i) {
-        argv[i + start] = const_cast<c8*>(keys[i]);
+        argv[i + start] = const_cast<s8*>(keys[i]);
         lens[i + start] = keyLens[i];
     }
     for (u32 i = 0; i < count; ++i) {
-        argv[i + start + count] = const_cast<c8*>(weight[i]);
+        argv[i + start + count] = const_cast<s8*>(weight[i]);
         lens[i + start + count] = weightLens[i];
     }
     argv[start + 2 * count] = (0 == aggregate ? "SUM" : (aggregate > 0 ? "MAX" : "MIN"));
@@ -628,9 +628,9 @@ bool CRedisRequest::zunionstore(const c8* destkey, u32 destkeyLen,
 
     bool ret;
     if (isClusterMode()) {
-        ret = launch(hashSlot(destkey, destkeyLen), cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(hashSlot(destkey, destkeyLen), cnt, const_cast<const s8**>(argv), lens);
     } else {
-        ret = launch(cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(cnt, const_cast<const s8**>(argv), lens);
     }
     if (cnt > maxcache) {
         delete[] argv;
@@ -640,9 +640,9 @@ bool CRedisRequest::zunionstore(const c8* destkey, u32 destkeyLen,
 }
 
 
-bool CRedisRequest::zinterstore(const c8* destkey, u32 destkeyLen,
-    const c8** keys, const u32* keyLens,
-    const c8** weight, const u32* weightLens,
+bool CRedisRequest::zinterstore(const s8* destkey, u32 destkeyLen,
+    const s8** keys, const u32* keyLens,
+    const s8** weight, const u32* weightLens,
     u32 count, s32 aggregate) {
     if (nullptr == destkey || 0 == destkeyLen || 0 == count
         || nullptr == keys || nullptr == keyLens
@@ -652,25 +652,25 @@ bool CRedisRequest::zinterstore(const c8* destkey, u32 destkeyLen,
 
     const u32 start = 2;
     const u32 maxcache = 128;
-    c8* tmp_argv[maxcache];
+    s8* tmp_argv[maxcache];
     u32 tmp_size[maxcache];
     const u32 cnt = start + 2 * count + 1;
-    c8** argv = cnt > maxcache ? new c8*[cnt] : tmp_argv;
+    s8** argv = cnt > maxcache ? new s8*[cnt] : tmp_argv;
     u32* lens = cnt > maxcache ? new u32[cnt] : tmp_size;
 
     argv[0] = "ZINTERSTORE";
     lens[0] = sizeof("ZINTERSTORE") - 1;
 
-    c8 num[16];
+    s8 num[16];
     argv[1] = num;
     lens[1] = snprintf(num, sizeof(num), "%u", count);
 
     for (u32 i = 0; i < count; ++i) {
-        argv[i + start] = const_cast<c8*>(keys[i]);
+        argv[i + start] = const_cast<s8*>(keys[i]);
         lens[i + start] = keyLens[i];
     }
     for (u32 i = 0; i < count; ++i) {
-        argv[i + start + count] = const_cast<c8*>(weight[i]);
+        argv[i + start + count] = const_cast<s8*>(weight[i]);
         lens[i + start + count] = weightLens[i];
     }
     argv[start + 2 * count] = (0 == aggregate ? "SUM" : (aggregate > 0 ? "MAX" : "MIN"));
@@ -678,9 +678,9 @@ bool CRedisRequest::zinterstore(const c8* destkey, u32 destkeyLen,
 
     bool ret;
     if (isClusterMode()) {
-        ret = launch(hashSlot(destkey, destkeyLen), cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(hashSlot(destkey, destkeyLen), cnt, const_cast<const s8**>(argv), lens);
     } else {
-        ret = launch(cnt, const_cast<const c8**>(argv), lens);
+        ret = launch(cnt, const_cast<const s8**>(argv), lens);
     }
     if (cnt > maxcache) {
         delete[] argv;
@@ -690,5 +690,5 @@ bool CRedisRequest::zinterstore(const c8* destkey, u32 destkeyLen,
 }
 
 } //namespace db {
-} // namespace irr
+} // namespace app
 

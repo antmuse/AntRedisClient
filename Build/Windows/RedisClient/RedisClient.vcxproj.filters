@@ -19,6 +19,9 @@
     <Filter Include="Source\RedisClient">
       <UniqueIdentifier>{65029b2f-ffea-4a8f-9f80-92dd5d839fce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Include\Core">
+      <UniqueIdentifier>{5c4dfe4b-d49d-43e8-8efc-150aa7bd508f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -26,9 +29,6 @@
   <ItemGroup>
     <ClInclude Include="..\..\..\Include\HConfig.h">
       <Filter>Include</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Include\RedisClient\CNoncopyable.h">
-      <Filter>Include\RedisClient</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Include\RedisClient\CRedisClient.h">
       <Filter>Include\RedisClient</Filter>
@@ -45,23 +45,113 @@
     <ClInclude Include="..\..\..\Include\RedisClient\CRedisResponse.h">
       <Filter>Include\RedisClient</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\RedisClient\CQueue1Way.h">
-      <Filter>Source\RedisClient</Filter>
+    <ClInclude Include="..\..\..\Include\Core\AppArray.h">
+      <Filter>Include\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\RedisClient\CQueue2Way.h">
-      <Filter>Source\RedisClient</Filter>
+    <ClInclude Include="..\..\..\Include\Core\AppList.h">
+      <Filter>Include\Core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Source\RedisClient\CRedisCommand.h">
-      <Filter>Source\RedisClient</Filter>
+    <ClInclude Include="..\..\..\Include\Core\AppMap.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\AppMath.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CConsoleLogReceiver.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CDict.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CEncoderMD5.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CFileLogReceiver.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CFileManager.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CFileReader.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CFileWriter.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CHtmlLogReceiver.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CLogger.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CMemoryHub.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CMemoryPool.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CQueue1Way.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CQueue2Way.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CQueueNode.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CSpeedLimiter.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CStreamFile.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CString.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CTimeManager.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CTimer.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\CTimerWheel.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\HEngineLog.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\HHashFunctions.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\ILogReceiver.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\INoCopy.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\IReferenceCounted.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\IUtility.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\StrConverter.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\TAllocator.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\RedisClient\CRedisCommand.h">
+      <Filter>Include\RedisClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\AppConverter.h">
+      <Filter>Include\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Include\Core\AppHeapSort.h">
+      <Filter>Include\Core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Source\RedisClient\CQueue1Way.cpp">
-      <Filter>Source\RedisClient</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Source\RedisClient\CQueue2Way.cpp">
-      <Filter>Source\RedisClient</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Source\RedisClient\CRedisClient.cpp">
       <Filter>Source\RedisClient</Filter>
     </ClCompile>

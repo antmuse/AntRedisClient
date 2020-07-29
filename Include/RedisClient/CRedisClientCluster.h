@@ -1,10 +1,10 @@
 #pragma once
 
-#include "irrMap.h"
+#include "AppMap.h"
 #include "CNetAddress.h"
 #include "CRedisClientPool.h"
 
-namespace irr {
+namespace app {
 namespace db {
 class CRedisResponse;
 
@@ -25,10 +25,10 @@ public:
     /**
     * @brief set a pool against to IP:Port
     */
-    CRedisClientPool* set(const c8* ipport, u32 maxTCP, const c8* passowrd = nullptr);
-    CRedisClientPool* set(const net::CNetAddress& addr, u32 maxTCP, const c8* passowrd = nullptr);
+    CRedisClientPool* set(const s8* ipport, u32 maxTCP, const s8* passowrd = nullptr);
+    CRedisClientPool* set(const net::CNetAddress& addr, u32 maxTCP, const s8* passowrd = nullptr);
 
-    const core::map<net::CNetAddress::ID, core::stringc>& getAllPassword()const {
+    const core::TMap<net::CNetAddress::ID, core::CString>& getAllPassword()const {
         return mPassword;
     }
 
@@ -36,10 +36,10 @@ public:
     * @brief set password against to IP:Port
     *        it's suggest to set passwords of all cluster nodes before open CRedisClientCluster.
     */
-    void setPassword(const c8* ipport, const c8* passowrd);
-    void setPassword(const net::CNetAddress& addr, const c8* passowrd);
+    void setPassword(const s8* ipport, const s8* passowrd);
+    void setPassword(const net::CNetAddress& addr, const s8* passowrd);
 
-    bool getPassword(const net::CNetAddress::ID& id, core::stringc& passowrd);
+    bool getPassword(const net::CNetAddress::ID& id, core::CString& passowrd);
     
     void setMaxTcp(u32 it) {
         mMaxTCP = it;
@@ -66,7 +66,7 @@ public:
     }
 
     CRedisClientPool* getBySlot(u32 it);
-    CRedisClientPool* getByAddress(const c8* iport);
+    CRedisClientPool* getByAddress(const s8* iport);
 
     void setSlot(u32 pos, CRedisClientPool* it);
 
@@ -94,10 +94,10 @@ private:
     CQueue2Way mQueueWait;  //wait auth,select
     CMemoryHub* mHub;
     CMutex mMutex;
-    core::map<net::CNetAddress::ID, core::stringc> mPassword;
-    core::map<net::CNetAddress::ID, CRedisClientPool*> mAllPool;
+    core::TMap<net::CNetAddress::ID, core::CString> mPassword;
+    core::TMap<net::CNetAddress::ID, CRedisClientPool*> mAllPool;
 };
 
 } //namespace db {
-} // namespace irr
+} // namespace app
 

@@ -1,6 +1,6 @@
 #include "CWorker.h"
 
-namespace irr {
+namespace app {
 
 void AppRedisPoolCallback(db::CRedisRequest* it, db::CRedisResponse* res) {
     CWorker* caller = reinterpret_cast<CWorker*>(it->getUserPointer());
@@ -29,8 +29,8 @@ void CWorker::callback(db::CRedisRequest* it, db::CRedisResponse* res) {
 
 void CWorker::run() {
     //return;
-    c8 key[128];
-    c8 val[128];
+    s8 key[128];
+    s8 val[128];
     for(s32 i = 0; mRunning && i < 10; i++) {
         snprintf(key, sizeof(key), "tk%d", i + 1);
         snprintf(val, sizeof(val), "tv-by-pool-index-%d", i + 1);
@@ -57,10 +57,20 @@ void CWorker::run() {
         con->setCallback(AppRedisPoolCallback);
         con->setUserPointer(this);
         con->setClientPool(&mRedisPool);
-        if(!con->get(key)) {
-            printf("redis get str failed\n");
-        } else {
+        if(con->get(key)) {
             AppAtomicIncrementFetch(&mFly);
+            db::CRedisRequest* con2 = new db::CRedisRequest();
+            con2->setCallback(AppRedisPoolCallback);
+            con2->setUserPointer(this);
+            con2->setClientPool(&mRedisPool);
+            if(con2->expire(key, 60)) {
+                AppAtomicIncrementFetch(&mFly);
+            } else {
+                printf("redis expire failed\n");
+            }
+            con2->drop();
+        } else {
+            printf("redis get str failed\n");
         }
         con->drop();
     }

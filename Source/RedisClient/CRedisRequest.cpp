@@ -1,6 +1,6 @@
 #include "CRedisRequest.h"
 
-namespace irr {
+namespace app {
 namespace db {
 
 CRedisRequest::CRedisRequest() {
@@ -12,5 +12,5 @@ CRedisRequest::~CRedisRequest() {
 }
 
 } //namespace db {
-} // namespace irr
+} // namespace app
 

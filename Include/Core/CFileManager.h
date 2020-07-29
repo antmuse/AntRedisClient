@@ -2,123 +2,132 @@
 #define	APP_CFILEMANAGER_H
 
 #include "HConfig.h"
-#include "path.h"
-#include "irrList.h"
-#include "irrArray.h"
+#include "CString.h"
+#include "AppList.h"
+#include "AppArray.h"
 
-namespace irr {
+namespace app {
 namespace io {
 
 //! An entry in a list of files, can be a folder or a file.
 struct SPathNode {
     u32 mID;
-
-    //! The name of the file
-    io::path mName;
-
-    //! The name of the file including the path
-    io::path mFullName;
-
-
-    //! True if this is a folder, false if not.
-    bool mDirectory;
-
-    //! The == operator is provided so that CFileList can slowly search the list!
+    core::CPath mName; //file or path
+    SPathNode(const tchar* nam) : mID(0), mName(nam) {
+    }
     bool operator==(const struct SPathNode& other) const {
-        if (mDirectory != other.mDirectory) {
-            return false;
-        }
-        return mFullName.equals_ignore_case(other.mFullName);
+        return mName.equals_ignore_case(other.mName);
     }
 
-    //! The < operator is provided so that CFileList can sort and quickly search the list.
     bool operator<(const struct SPathNode& other) const {
-        if (mDirectory != other.mDirectory) {
-            return mDirectory;
-        }
-        return mFullName.lower_ignore_case(other.mFullName);
+        return mName.lower_ignore_case(other.mName);
     }
 };
 
 class CPathList {
 public:
-    CPathList(const io::path& workPath) {
+    CPathList(const core::CPath& workPath) :mWorkPath(workPath) {
     }
     ~CPathList() {
     }
-
-    u32 getSize()const {
-        return mNodes.size();
+    const core::CPath& getWorkPath()const {
+        return mWorkPath;
     }
-
+    u32 getCount()const {
+        return mPaths.size() + mFiles.size();
+    }
+    u32 getPathCount()const {
+        return mPaths.size();
+    }
+    u32 getFileCount()const {
+        return mFiles.size();
+    }
     void sort() {
-        mNodes.sort();
+        mPaths.sort();
+        mFiles.sort();
     }
-
-    u32 addNode(const io::path& fullname, const io::path& fname, bool isDir);
+    const SPathNode& getPath(u32 idx)const {
+        return mPaths[idx];
+    }
+    const SPathNode& getFile(u32 idx)const {
+        return mFiles[idx];
+    }
+    u32 addNode(const tchar* fname, bool isDir);
 
 private:
-    io::path mWorkPath;
-    core::array<SPathNode> mNodes;
+    core::CPath mWorkPath;
+    core::TArray<SPathNode> mPaths;
+    core::TArray<SPathNode> mFiles;
 };
 
 class CFileManager {
 public:
-    static io::path GStartWorkPath;
-    static void setStartWorkPath(const fschar_t* path);
+    static const core::CPath& getStartWorkPath();
+
+    //! Returns the string of the current working directory
+    static core::CPath getWorkPath();
+
+    //! Changes the current Working Directory to the given string.
+    static bool setWorkPath(const core::CPath& newDirectory);
+
 
     CFileManager();
+
+    CFileManager(const core::CPath& iVal);
 
     ~CFileManager();
 
     bool resetWorkPath() {
-        return setWorkPath(GStartWorkPath);
+        return setWorkPath(getStartWorkPath());
     }
 
     //! flatten a path and file name for example: "/you/me/../." becomes "/you"
-    io::path& flattenFilename(io::path& directory, const io::path& root) const;
+    core::CPath& flattenFilename(core::CPath& directory, const core::CPath& root) const;
 
     //! Get the relative filename, relative to the given directory
-    io::path getRelativeFilename(const path& filename, const path& directory) const;
+    core::CPath getRelativeFilename(const core::CPath& filename, const core::CPath& directory) const;
 
-    //! Returns the string of the current working directory
-    const io::path& getWorkPath();
-
-    //! Changes the current Working Directory to the given string.
-    bool setWorkPath(const io::path& newDirectory);
-
-    io::path getAbsolutePath(const io::path& filename) const;
+    core::CPath getAbsolutePath(const core::CPath& filename) const;
 
     /**
     * @return the base part of a filename(removed the directory part).
     *  If no directory path is prefixed, the full name is returned.
     */
-    io::path getFileBasename(const io::path& filename, bool keepExtension = true) const;
+    core::CPath getFileBasename(const core::CPath& filename, bool keepExtension = true) const;
 
     //! returns the directory part of a filename, i.e. all until the first
     //! slash or backslash, excluding it. If no directory path is prefixed, a '.'
     //! is returned.
-    io::path getFilePath(const io::path& filename) const;
+    core::CPath getFilePath(const core::CPath& filename) const;
 
     //! determines if a file exists and would be able to be opened.
-    bool existFile(const io::path& filename) const;
+    static bool existFile(const core::CPath& filename);
 
-    //! Creates a list of files and directories in the current working directory
-    CPathList* createFileList();
+    static bool deleteFile(const core::CPath& filename);
 
-    bool createPath(const io::path& iPath);
+    /**
+    * @brief Creates a list of files and directories in the current working directory
+    * @param readHide got hide files and paths if true.
+    */
+    CPathList* createFileList(bool readHide = false);
 
-    const io::path& getCurrentPath() const {
+    static bool createPath(const core::CPath& iPath);
+
+    void setCurrentPath(const core::CPath& iVal) {
+        mWorkPath = iVal;
+    }
+
+    const core::CPath& getCurrentPath() const {
         return mWorkPath;
     }
 
 protected:
-    io::path mWorkPath;
+    core::CPath mWorkPath;
 };
 
 
 } // end namespace io
-} // end namespace irr
+} // end namespace app
 
 #endif //APP_CFILEMANAGER_H
 

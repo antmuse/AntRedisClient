@@ -2,11 +2,11 @@
 
 #include "CThread.h"
 #include "CRedisClientPool.h"
-#include "IAppLogger.h"
+#include "CLogger.h"
 #include "CRedisRequest.h"
 #include "CRedisClientCluster.h"
 
-namespace irr {
+namespace app {
 
 
 class CWorkerClusterZset : public IRunnable {

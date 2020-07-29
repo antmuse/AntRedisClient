@@ -9,14 +9,13 @@
 #define APP_CSEMAPHORE_H
 
 #include "HConfig.h"
-#include "irrTypes.h"
 #if defined( APP_PLATFORM_ANDROID )  || defined( APP_PLATFORM_LINUX )
 #include <pthread.h>
 #include <errno.h>
 #endif
 
 
-namespace irr {
+namespace app {
 
 /**
 *@class CSemaphore
@@ -49,7 +48,7 @@ public:
     *@param inherit The inheritance option of semaphore.
     *@return true if success, else false.
     */
-    bool open(fschar_t* iName, bool inherit);
+    bool open(tchar* iName, bool inherit);
 
 
     /**
@@ -59,7 +58,7 @@ public:
     *@param max The maximum value of the semaphore, must be greater than zero.
     *@return true if success, else false.
     */
-    bool init(fschar_t* iName, s32 initValue, s32 max);
+    bool init(tchar* iName, s32 initValue, s32 max);
 
 
     /**
@@ -99,7 +98,7 @@ private:
 #endif //APP_PLATFORM_WINDOWS
 };
 
-} // namespace irr
+} // namespace app
 
 
 #endif // APP_CSEMAPHORE_H

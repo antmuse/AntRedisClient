@@ -8,7 +8,7 @@
 #include "CRedisRequest.h"
 
 
-namespace irr {
+namespace app {
 namespace db {
 class CRedisClientPool;
 
@@ -101,7 +101,7 @@ public:
     bool open();
     void close();
 
-    bool sendRequest(const c8* buf, u32 iSize, CRedisCommand* it);
+    bool sendRequest(const s8* buf, u32 iSize, CRedisCommand* it);
 
 private:
     void* mUserPointer;
@@ -116,7 +116,7 @@ private:
     s32 mTcpStatus;
 
     CSpinlock mLock;     //lock=busy, unlock=idle
-    c8 mPassWord[32];
+    s8 mPassWord[32];
     s32 mDatabaseID;
     CMemoryHub* mHub;
     CRedisResponse* mResult;
@@ -124,5 +124,5 @@ private:
 };
 
 } //namespace db {
-} // end namespace irr
+} // end namespace app
 
